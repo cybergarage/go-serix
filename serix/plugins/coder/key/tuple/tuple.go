@@ -23,10 +23,10 @@ import (
 	"github.com/cybergarage/go-serix/serix/document"
 )
 
-// Tuple represents a tuple of elements that can be packed into a sortable byte sequence
+// Tuple represents a tuple of elements that can be packed into a sortable byte sequence.
 type Tuple []interface{}
 
-// Pack encodes the tuple into a byte slice using gob encoding
+// Pack encodes the tuple into a byte slice using gob encoding.
 func (t Tuple) Pack() []byte {
 	var buf bytes.Buffer
 	encoder := gob.NewEncoder(&buf)
@@ -135,7 +135,7 @@ func (t Tuple) packSimple() []byte {
 	return buf.Bytes()
 }
 
-// Unpack decodes a byte slice into a tuple
+// Unpack decodes a byte slice into a tuple.
 func Unpack(data []byte) (Tuple, error) {
 	buf := bytes.NewBuffer(data)
 	decoder := gob.NewDecoder(buf)
