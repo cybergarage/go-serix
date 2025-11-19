@@ -12,14 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cbor
+package kv
 
 import (
-	"testing"
-
-	"github.com/cybergarage/puzzledb-go/puzzledbtest/plugins/coder/document"
+	"github.com/cybergarage/go-serix/serix/document"
 )
 
-func TestCBORCorder(t *testing.T) {
-	document.DocumentCoderTest(t, NewCoder())
+// Key represents an object key.
+type Key = document.Key
+
+// NewKeyWith returns a new key from the specified header and key elements.
+func NewKeyWith(header KeyHeader, key Key) Key {
+	kvKey := []any{header.Bytes()}
+	return append(kvKey, key.Elements()...)
 }

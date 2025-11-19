@@ -12,17 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package kv
+package tuple
 
 import (
-	"github.com/cybergarage/puzzledb-go/puzzledb/document"
+	"testing"
+
+	"github.com/cybergarage/go-serix/serixtest/plugins/coder/key"
 )
 
-// Key represents an object key.
-type Key = document.Key
-
-// NewKeyWith returns a new key from the specified header and key elements.
-func NewKeyWith(header KeyHeader, key Key) Key {
-	kvKey := []any{header.Bytes()}
-	return append(kvKey, key.Elements()...)
+func TestTupleCorder(t *testing.T) {
+	key.KeyCoderTest(t, NewCoder())
 }

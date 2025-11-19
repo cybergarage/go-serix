@@ -19,7 +19,7 @@ import (
 
 	"github.com/apple/foundationdb/bindings/go/src/fdb"
 	"github.com/apple/foundationdb/bindings/go/src/fdb/tuple"
-	"github.com/cybergarage/puzzledb-go/puzzledb/document"
+	"github.com/cybergarage/go-serix/serix/document"
 )
 
 func newTupleWith(key document.Key) (tuple.Tuple, error) {

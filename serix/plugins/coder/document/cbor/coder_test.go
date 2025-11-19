@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package key
+package cbor
 
 import (
-	"github.com/cybergarage/puzzledb-go/puzzledb/document"
-	"github.com/cybergarage/puzzledb-go/puzzledb/plugins"
+	"testing"
+
+	"github.com/cybergarage/go-serix/serixtest/plugins/coder/document"
 )
 
-type Service interface {
-	plugins.Service
-	document.KeyCoder
+func TestCBORCorder(t *testing.T) {
+	document.DocumentCoderTest(t, NewCoder())
 }

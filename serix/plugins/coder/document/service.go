@@ -15,8 +15,8 @@
 package document
 
 import (
-	"github.com/cybergarage/puzzledb-go/puzzledb/document"
-	"github.com/cybergarage/puzzledb-go/puzzledb/plugins"
+	"github.com/cybergarage/go-serix/serix/document"
+	"github.com/cybergarage/go-serix/serix/plugins"
 )
 
 type Service interface {

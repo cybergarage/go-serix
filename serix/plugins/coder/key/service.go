@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package tuple
+package key
 
 import (
-	"testing"
-
-	"github.com/cybergarage/puzzledb-go/puzzledbtest/plugins/coder/key"
+	"github.com/cybergarage/go-serix/serix/document"
+	"github.com/cybergarage/go-serix/serix/plugins"
 )
 
-func TestTupleCorder(t *testing.T) {
-	key.KeyCoderTest(t, NewCoder())
+type Service interface {
+	plugins.Service
+	document.KeyCoder
 }

@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cbor
+package tuple
 
 import (
-	"io"
-
-	"github.com/cybergarage/go-cbor/cbor"
-	"github.com/cybergarage/puzzledb-go/puzzledb/config"
-	"github.com/cybergarage/puzzledb-go/puzzledb/document"
-	"github.com/cybergarage/puzzledb-go/puzzledb/plugins"
+	"github.com/apple/foundationdb/bindings/go/src/fdb/tuple"
+	"github.com/cybergarage/go-serix/serix/config"
+	"github.com/cybergarage/go-serix/serix/document"
+	"github.com/cybergarage/go-serix/serix/plugins"
 )
 
 // Coder represents a CBOR erializer.
@@ -38,24 +36,30 @@ func (s *Coder) SetConfig(conf config.Config) {
 
 // ServiceType returns the plug-in service type.
 func (s *Coder) ServiceType() plugins.ServiceType {
-	return plugins.CoderDocumentService
+	return plugins.CoderKeyService
 }
 
 // ServiceName returns the plug-in service name.
 func (s *Coder) ServiceName() string {
-	return "cbor"
+	return "tuple"
 }
 
-// EncodeDocument writes the specified object to the specified writer.
-func (s *Coder) EncodeDocument(w io.Writer, obj document.Object) error {
-	cbor := cbor.NewEncoder(w)
-	return cbor.Encode(obj)
+// EncodeKey returns the encoded bytes from the specified key if available, otherwise returns an error.
+func (s *Coder) EncodeKey(key document.Key) ([]byte, error) {
+	tpl, err := newTupleWith(key)
+	if err != nil {
+		return nil, err
+	}
+	return tpl.Pack(), nil
 }
 
-// DecodeDocument returns the decorded object from the specified reader if available, otherwise returns an error.
-func (s *Coder) DecodeDocument(r io.Reader) (document.Object, error) {
-	cbor := cbor.NewDecoder(r)
-	return cbor.Decode()
+// DecodeKey returns the decoded key from the specified bytes if available, otherwise returns an error.
+func (s *Coder) DecodeKey(b []byte) (document.Key, error) {
+	tpl, err := tuple.Unpack(b)
+	if err != nil {
+		return nil, err
+	}
+	return newKeyWith(tpl), nil
 }
 
 // Start starts this coder.
