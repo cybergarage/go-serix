@@ -1,4 +1,4 @@
-// Copyright (C) 2022 The PuzzleDB Authors.
+// Copyright (C) 2022 The go-serix Authors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import (
 	"testing"
 
 	"github.com/cybergarage/go-pict/pict"
-	"github.com/cybergarage/puzzledb-go/puzzledb/document"
+	"github.com/cybergarage/go-serix/serix/document"
 )
 
 //go:embed go_types.pict
