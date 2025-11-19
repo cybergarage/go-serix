@@ -63,8 +63,5 @@ cover: test
 build:
 	go build -v -gcflags=${GCFLAGS} -ldflags=${LDFLAGS} ${BINS}
 
-install:
-	go install -v -gcflags=${GCFLAGS} -ldflags=${LDFLAGS} ${BINS}
-
 clean:
 	go clean -i ${PKG}
