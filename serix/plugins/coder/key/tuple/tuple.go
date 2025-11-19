@@ -198,8 +198,10 @@ func unpackSimple(data []byte) (Tuple, error) {
 	buf := bytes.NewBuffer(data)
 	var tuple Tuple
 
+	var err error
 	for buf.Len() > 0 {
-		marker, err := buf.ReadByte()
+		var marker byte
+		marker, err = buf.ReadByte()
 		if err != nil {
 			break
 		}
@@ -261,7 +263,7 @@ func unpackSimple(data []byte) (Tuple, error) {
 		}
 	}
 
-	return tuple, nil
+	return tuple, err
 }
 
 func toInt64(v interface{}) int64 {
