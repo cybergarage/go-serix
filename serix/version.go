@@ -15,5 +15,5 @@
 package serix
 
 const (
-	Version = ".."
+	Version = "v0.9.1"
 )
