@@ -18,7 +18,6 @@ import (
 	"io"
 
 	"github.com/cybergarage/go-cbor/cbor"
-	"github.com/cybergarage/go-serix/serix/config"
 	"github.com/cybergarage/go-serix/serix/document"
 	"github.com/cybergarage/go-serix/serix/plugins"
 )
@@ -30,10 +29,6 @@ type Coder struct {
 // NewCoder returns a new CBOR erializer instance.
 func NewCoder() *Coder {
 	return &Coder{}
-}
-
-// SetConfig sets the specified configuration.
-func (s *Coder) SetConfig(conf config.Config) {
 }
 
 // ServiceType returns the plug-in service type.
