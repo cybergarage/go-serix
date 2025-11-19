@@ -38,6 +38,7 @@ func deepEqual(x, y any) error {
 	return fmt.Errorf("%v != %v", x, y) // nolint:goerr113
 }
 
+// KeyCoderTest tests the encoding and decoding of keys using the provided KeyCoder.
 // nolint:goerr113, gocognit, gci, gocyclo, gosec, maintidx
 func KeyCoderTest(t *testing.T, coder document.KeyCoder) {
 	t.Helper()

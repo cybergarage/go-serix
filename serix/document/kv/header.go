@@ -30,7 +30,7 @@ type Version byte
 // IndexType represents an index type.
 type IndexType byte
 
-// NewKeyHeader creates a new key header from the specified bytes.
+// NewKeyHeaderFrom creates a new key header from the specified bytes.
 func NewKeyHeaderFrom(b []byte) KeyHeader {
 	var header KeyHeader
 	copy(header[:], b)
