@@ -15,7 +15,6 @@
 package tuple
 
 import (
-	"github.com/apple/foundationdb/bindings/go/src/fdb/tuple"
 	"github.com/cybergarage/go-serix/serix/document"
 )
 
@@ -39,7 +38,7 @@ func (s *Coder) EncodeKey(key document.Key) ([]byte, error) {
 
 // DecodeKey returns the decoded key from the specified bytes if available, otherwise returns an error.
 func (s *Coder) DecodeKey(b []byte) (document.Key, error) {
-	tpl, err := tuple.Unpack(b)
+	tpl, err := Unpack(b)
 	if err != nil {
 		return nil, err
 	}

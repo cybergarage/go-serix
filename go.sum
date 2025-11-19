@@ -1,2 +1,6 @@
+github.com/cybergarage/go-cbor v1.3.2 h1:2XMRZcklxQn8OPXrKbtEEXSs+cw/YTqwBH7iu4YcWBQ=
+github.com/cybergarage/go-cbor v1.3.2/go.mod h1:cook89Gbmskra2R73QogBAfPqVSYJE7tlY9M25uaVfI=
 github.com/cybergarage/go-pict v1.0.1 h1:NhCs2D2KFZLak06KJw6w8QMb83ijK9BpQvS/jwenR1s=
 github.com/cybergarage/go-pict v1.0.1/go.mod h1:nIEr3FrSaTzrZRTIyTQ/pulaUWPf6TXNEN5RtwhCfI0=
+github.com/cybergarage/go-safecast v1.3.4 h1:gy0MwfrG+o56GeaJu7/5FB6Pubqm6ZGzg50ebvZbSvM=
+github.com/cybergarage/go-safecast v1.3.4/go.mod h1:flFLUrI49kNK+U7ZeQDQxbaxxQyFVQGKpT7KYN3A4ew=
