@@ -19,7 +19,6 @@ import (
 
 	"github.com/cybergarage/go-cbor/cbor"
 	"github.com/cybergarage/go-serix/serix/document"
-	"github.com/cybergarage/go-serix/serix/plugins"
 )
 
 // Coder represents a CBOR erializer.
@@ -29,16 +28,6 @@ type Coder struct {
 // NewCoder returns a new CBOR erializer instance.
 func NewCoder() *Coder {
 	return &Coder{}
-}
-
-// ServiceType returns the plug-in service type.
-func (s *Coder) ServiceType() plugins.ServiceType {
-	return plugins.CoderDocumentService
-}
-
-// ServiceName returns the plug-in service name.
-func (s *Coder) ServiceName() string {
-	return "cbor"
 }
 
 // EncodeDocument writes the specified object to the specified writer.

@@ -17,7 +17,6 @@ package tuple
 import (
 	"github.com/apple/foundationdb/bindings/go/src/fdb/tuple"
 	"github.com/cybergarage/go-serix/serix/document"
-	"github.com/cybergarage/go-serix/serix/plugins"
 )
 
 // Coder represents a CBOR erializer.
@@ -27,16 +26,6 @@ type Coder struct {
 // NewCoder returns a new CBOR erializer instance.
 func NewCoder() *Coder {
 	return &Coder{}
-}
-
-// ServiceType returns the plug-in service type.
-func (s *Coder) ServiceType() plugins.ServiceType {
-	return plugins.CoderKeyService
-}
-
-// ServiceName returns the plug-in service name.
-func (s *Coder) ServiceName() string {
-	return "tuple"
 }
 
 // EncodeKey returns the encoded bytes from the specified key if available, otherwise returns an error.
