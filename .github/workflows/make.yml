@@ -18,8 +18,6 @@ jobs:
           go-version: '1.25.x'
       - name: Set up golangci-lint
         run: sudo snap install golangci-lint --classic
-      - name: Install
-        run: make install
       - name: Test
         run: make test
       - name: Upload coverage reports to Codecov
