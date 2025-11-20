@@ -9,3 +9,5 @@
 
 - Efficient binary serialization (e.g. CBOR)
 - Pluggable encoder / decoder abstractions
+
+The name "Serix" is derived from "Serialize" and "X" (standing for extensibility), reflecting the project's goal of providing a flexible and extensible serialization framework.
