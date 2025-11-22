@@ -37,7 +37,7 @@ func deepEqual(x, y any) error {
 	if safecast.Equal(x, y) {
 		return nil
 	}
-	return fmt.Errorf("%v != %v", x, y) // nolint:goerr113
+	return fmt.Errorf("%v (%T) != %v (%T)", x, x, y, y)
 }
 
 func primitiveDocumentTest(t *testing.T, coder document.Coder) {

@@ -35,7 +35,7 @@ func deepEqual(x, y any) error {
 	if fmt.Sprintf("%v", x) == fmt.Sprintf("%v", y) {
 		return nil
 	}
-	return fmt.Errorf("%v != %v", x, y) // nolint:goerr113
+	return fmt.Errorf("%v != %v", x, y)
 }
 
 // KeyCoderTest tests the encoding and decoding of keys using the provided KeyCoder.
