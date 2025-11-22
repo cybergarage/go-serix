@@ -33,7 +33,7 @@ func (s *Coder) EncodeKey(key document.Key) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return tpl.Pack(), nil
+	return tpl.Pack()
 }
 
 // DecodeKey returns the decoded key from the specified bytes if available, otherwise returns an error.

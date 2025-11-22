@@ -20,6 +20,7 @@ import (
 	"encoding/gob"
 	"fmt"
 
+	"github.com/cybergarage/go-safecast/safecast"
 	"github.com/cybergarage/go-serix/serix/document"
 )
 
@@ -27,7 +28,7 @@ import (
 type Tuple []interface{}
 
 // Pack encodes the tuple into a byte slice using gob encoding.
-func (t Tuple) Pack() []byte {
+func (t Tuple) Pack() ([]byte, error) {
 	var buf bytes.Buffer
 	encoder := gob.NewEncoder(&buf)
 
@@ -40,9 +41,13 @@ func (t Tuple) Pack() []byte {
 	err := encoder.Encode(elements)
 	if err != nil {
 		// Fallback to simple binary encoding for basic types
-		return t.packSimple()
+		packed, err := t.packSimple()
+		if err != nil {
+			return nil, err
+		}
+		return packed, nil
 	}
-	return buf.Bytes()
+	return buf.Bytes(), nil
 }
 
 type encodedElement struct {
@@ -89,7 +94,7 @@ func encodeElementWithType(elem interface{}) encodedElement {
 	}
 }
 
-func (t Tuple) packSimple() []byte {
+func (t Tuple) packSimple() ([]byte, error) {
 	var buf bytes.Buffer
 
 	for _, elem := range t {
@@ -104,16 +109,25 @@ func (t Tuple) packSimple() []byte {
 			}
 		case int, int8, int16, int32, int64:
 			buf.WriteByte(0x10) // int marker
-			val := toInt64(v)
-			binary.Write(&buf, binary.BigEndian, val)
+			var tv int64
+			if err := safecast.ToInt64(v, &tv); err != nil {
+				return nil, err
+			}
+			binary.Write(&buf, binary.BigEndian, tv)
 		case uint, uint8, uint16, uint32, uint64:
 			buf.WriteByte(0x11) // uint marker
-			val := toUint64(v)
-			binary.Write(&buf, binary.BigEndian, val)
+			var tv uint64
+			if err := safecast.ToUint64(v, &tv); err != nil {
+				return nil, err
+			}
+			binary.Write(&buf, binary.BigEndian, tv)
 		case float32, float64:
 			buf.WriteByte(0x20) // float marker
-			val := toFloat64(v)
-			binary.Write(&buf, binary.BigEndian, val)
+			var tv float64
+			if err := safecast.ToFloat64(v, &tv); err != nil {
+				return nil, err
+			}
+			binary.Write(&buf, binary.BigEndian, tv)
 		case string:
 			buf.WriteByte(0x30) // string marker
 			data := []byte(v)
@@ -132,7 +146,7 @@ func (t Tuple) packSimple() []byte {
 			buf.Write(data)
 		}
 	}
-	return buf.Bytes()
+	return buf.Bytes(), nil
 }
 
 // Unpack decodes a byte slice into a tuple.
@@ -264,51 +278,6 @@ func unpackSimple(data []byte) (Tuple, error) {
 	}
 
 	return tuple, err
-}
-
-func toInt64(v interface{}) int64 {
-	switch val := v.(type) {
-	case int:
-		return int64(val)
-	case int8:
-		return int64(val)
-	case int16:
-		return int64(val)
-	case int32:
-		return int64(val)
-	case int64:
-		return val
-	default:
-		return 0
-	}
-}
-
-func toUint64(v interface{}) uint64 {
-	switch val := v.(type) {
-	case uint:
-		return uint64(val)
-	case uint8:
-		return uint64(val)
-	case uint16:
-		return uint64(val)
-	case uint32:
-		return uint64(val)
-	case uint64:
-		return val
-	default:
-		return 0
-	}
-}
-
-func toFloat64(v interface{}) float64 {
-	switch val := v.(type) {
-	case float32:
-		return float64(val)
-	case float64:
-		return val
-	default:
-		return 0
-	}
 }
 
 func newTupleWith(key document.Key) (Tuple, error) {
