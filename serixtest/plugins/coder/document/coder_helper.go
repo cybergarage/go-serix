@@ -23,6 +23,7 @@ import (
 	"testing"
 
 	"github.com/cybergarage/go-pict/pict"
+	"github.com/cybergarage/go-safecast/safecast"
 	"github.com/cybergarage/go-serix/serix/document"
 )
 
@@ -33,7 +34,7 @@ func deepEqual(x, y any) error {
 	if reflect.DeepEqual(x, y) {
 		return nil
 	}
-	if fmt.Sprintf("%v", x) == fmt.Sprintf("%v", y) {
+	if safecast.Equal(x, y) {
 		return nil
 	}
 	return fmt.Errorf("%v != %v", x, y) // nolint:goerr113
