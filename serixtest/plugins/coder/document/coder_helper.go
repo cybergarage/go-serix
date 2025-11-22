@@ -49,35 +49,37 @@ func primitiveDocumentTest(t *testing.T, coder document.Coder) {
 	}
 
 	pictParams := pict.Params()
-	for _, pictCase := range pict.Cases() {
-		for n, pictParam := range pictParams {
-			pictElem := pictCase[n]
-			obj, err := pictElem.CastType(string(pictParam))
-			if err != nil {
-				t.Error(err)
-				return
-			}
+	for n, pictParam := range pictParams {
+		t.Run(string(pictParam), func(t *testing.T) {
+			for _, pictCase := range pict.Cases() {
+				pictElem := pictCase[n]
+				obj, err := pictElem.CastType(string(pictParam))
+				if err != nil {
+					t.Error(err)
+					return
+				}
 
-			var w bytes.Buffer
-			err = coder.EncodeDocument(&w, obj)
-			if err != nil {
-				t.Error(err)
-				return
-			}
+				var w bytes.Buffer
+				err = coder.EncodeDocument(&w, obj)
+				if err != nil {
+					t.Error(err)
+					return
+				}
 
-			r := bytes.NewReader(w.Bytes())
-			decObj, err := coder.DecodeDocument(r)
-			if err != nil {
-				t.Error(err)
-				return
-			}
+				r := bytes.NewReader(w.Bytes())
+				decObj, err := coder.DecodeDocument(r)
+				if err != nil {
+					t.Error(err)
+					return
+				}
 
-			err = deepEqual(decObj, obj)
-			if err != nil {
-				t.Error(err)
-				return
+				err = deepEqual(decObj, obj)
+				if err != nil {
+					t.Error(err)
+					return
+				}
 			}
-		}
+		})
 	}
 }
 
