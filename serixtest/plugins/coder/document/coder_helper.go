@@ -54,7 +54,12 @@ func primitiveDocumentTest(t *testing.T, coder document.Coder) {
 		t.Run(string(pictParam), func(t *testing.T) {
 			for _, pictCase := range pict.Cases() {
 				pictElem := pictCase[n]
-				obj, err := pictElem.CastType(string(pictParam))
+				pictType, err := pictParam.Type()
+				if err != nil {
+					t.Error(err)
+					return
+				}
+				obj, err := pictElem.CastTo(pictType)
 				if err != nil {
 					t.Error(err)
 					return
@@ -99,7 +104,12 @@ func mapDocumentTest(t *testing.T, coder document.Coder) {
 		for n, pictParam := range pictParams {
 			name := string(pictParam)
 			pictElem := pictCase[n]
-			v, err := pictElem.CastType(name)
+			pictType, err := pictParam.Type()
+			if err != nil {
+				t.Error(err)
+				return
+			}
+			v, err := pictElem.CastTo(pictType)
 			if err != nil {
 				t.Error(err)
 				return
@@ -151,9 +161,13 @@ func arrayDocumentTest(t *testing.T, coder document.Coder) {
 	for _, pictCase := range pict.Cases() {
 		obj := []any{}
 		for n, pictParam := range pictParams {
-			name := string(pictParam)
 			pictElem := pictCase[n]
-			v, err := pictElem.CastType(name)
+			pictType, err := pictParam.Type()
+			if err != nil {
+				t.Error(err)
+				return
+			}
+			v, err := pictElem.CastTo(pictType)
 			if err != nil {
 				t.Error(err)
 				return
