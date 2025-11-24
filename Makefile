@@ -39,6 +39,11 @@ version:
 	@pushd ${PKG_SRC_DIR} && ./version.gen > version.go && popd
 	-git commit ${PKG_SRC_DIR}/version.go -m "Update version"
 
+%.pict : %.mod
+	pict $< > $@
+
+picts := $(patsubst %.mod,%.pict,$(wildcard serixtest/plugins/coder/document/*.mod serixtest/plugins/coder/key/*.mod))
+
 format: version
 	gofmt -s -w ${PKG_SRC_DIR} ${TEST_PKG_DIR} ${BIN_SRC_DIR}
 
@@ -53,7 +58,7 @@ godoc:
 	open http://localhost:6060/pkg/${PKG_ID}/ || xdg-open http://localhost:6060/pkg/${PKG_ID}/ || gnome-open http://localhost:6060/pkg/${PKG_ID}/
 	godoc -http=:6060 -play
 
-test: lint
+test: lint $(picts)
 	go test -v -p 1 -timeout 10m -cover -coverpkg=${PKG}/... -coverprofile=${PKG_COVER}.out ${PKG}/... ${TEST_PKG}/...
 	go tool cover -html=${PKG_COVER}.out -o ${PKG_COVER}.html
 
