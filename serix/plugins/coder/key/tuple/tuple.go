@@ -25,7 +25,7 @@ import (
 )
 
 // Tuple represents a tuple of elements that can be packed into a sortable byte sequence.
-type Tuple []interface{}
+type Tuple []any
 
 // Pack encodes the tuple into a byte slice using gob encoding.
 func (t Tuple) Pack() ([]byte, error) {
@@ -52,10 +52,10 @@ func (t Tuple) Pack() ([]byte, error) {
 
 type encodedElement struct {
 	Type  string
-	Value interface{}
+	Value any
 }
 
-func encodeElementWithType(elem interface{}) encodedElement {
+func encodeElementWithType(elem any) encodedElement {
 	switch v := elem.(type) {
 	case nil:
 		return encodedElement{Type: "nil", Value: nil}
@@ -163,49 +163,113 @@ func Unpack(data []byte) (Tuple, error) {
 
 	tuple := make(Tuple, len(elements))
 	for i, elem := range elements {
-		tuple[i] = decodeElementWithType(elem)
+		var err error
+		tuple[i], err = decodeElementWithType(elem)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return tuple, nil
 }
 
-func decodeElementWithType(elem encodedElement) interface{} {
+func decodeElementWithType(elem encodedElement) (any, error) {
 	switch elem.Type {
 	case "nil":
-		return nil
+		return nil, nil
 	case "bool":
-		return elem.Value.(bool)
+		var v bool
+		if err := safecast.ToBool(elem.Value, &v); err != nil {
+			return nil, err
+		}
+		return v, nil
 	case "int":
-		return int(elem.Value.(int64))
+		var v int
+		if err := safecast.ToInt(elem.Value, &v); err != nil {
+			return nil, err
+		}
+		return int(v), nil
 	case "int8":
-		return int8(elem.Value.(int64))
+		var v int8
+		if err := safecast.ToInt8(elem.Value, &v); err != nil {
+			return nil, err
+		}
+		return v, nil
 	case "int16":
-		return int16(elem.Value.(int64))
+		var v int16
+		if err := safecast.ToInt16(elem.Value, &v); err != nil {
+			return nil, err
+		}
+		return v, nil
 	case "int32":
-		return int32(elem.Value.(int64))
+		var v int32
+		if err := safecast.ToInt32(elem.Value, &v); err != nil {
+			return nil, err
+		}
+		return v, nil
 	case "int64":
-		return elem.Value.(int64)
+		var v int64
+		if err := safecast.ToInt64(elem.Value, &v); err != nil {
+			return nil, err
+		}
+		return v, nil
 	case "uint":
-		return uint(elem.Value.(uint64))
+		var v uint
+		if err := safecast.ToUint(elem.Value, &v); err != nil {
+			return nil, err
+		}
+		return v, nil
 	case "uint8":
-		return uint8(elem.Value.(uint64))
+		var v uint8
+		if err := safecast.ToUint8(elem.Value, &v); err != nil {
+			return nil, err
+		}
+		return v, nil
 	case "uint16":
-		return uint16(elem.Value.(uint64))
+		var v uint16
+		if err := safecast.ToUint16(elem.Value, &v); err != nil {
+			return nil, err
+		}
+		return v, nil
 	case "uint32":
-		return uint32(elem.Value.(uint64))
+		var v uint32
+		if err := safecast.ToUint32(elem.Value, &v); err != nil {
+			return nil, err
+		}
+		return v, nil
 	case "uint64":
-		return elem.Value.(uint64)
+		var v uint64
+		if err := safecast.ToUint64(elem.Value, &v); err != nil {
+			return nil, err
+		}
+		return v, nil
 	case "float32":
-		return float32(elem.Value.(float64))
+		var v float32
+		if err := safecast.ToFloat32(elem.Value, &v); err != nil {
+			return nil, err
+		}
+		return v, nil
 	case "float64":
-		return elem.Value.(float64)
+		var v float64
+		if err := safecast.ToFloat64(elem.Value, &v); err != nil {
+			return nil, err
+		}
+		return v, nil
 	case "string":
-		return elem.Value.(string)
+		var v string
+		if err := safecast.ToString(elem.Value, &v); err != nil {
+			return nil, err
+		}
+		return v, nil
 	case "bytes":
-		return elem.Value.([]byte)
-	default:
-		return elem.Value
+		var v []byte
+		if err := safecast.ToBytes(elem.Value, &v); err != nil {
+			return nil, err
+		}
+		return v, nil
 	}
+
+	return nil, fmt.Errorf("unknown type: %s", elem.Type)
 }
 
 func unpackSimple(data []byte) (Tuple, error) {
