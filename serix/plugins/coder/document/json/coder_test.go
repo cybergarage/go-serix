@@ -21,5 +21,5 @@ import (
 )
 
 func TestJSONCoder(t *testing.T) {
-	document.DocumentCoderTest(t, NewCoder())
+	document.ObjectCoderTest(t, NewCoder())
 }

@@ -21,5 +21,5 @@ import (
 )
 
 func TestCBORCorder(t *testing.T) {
-	document.DocumentCoderTest(t, NewCoder())
+	document.ObjectCoderTest(t, NewCoder())
 }
