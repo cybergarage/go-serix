@@ -41,13 +41,3 @@ func (s *Coder) DecodeDocument(r io.Reader) (document.Object, error) {
 	cbor := cbor.NewDecoder(r)
 	return cbor.Decode()
 }
-
-// Start starts this coder.
-func (s *Coder) Start() error {
-	return nil
-}
-
-// Stop stops this coder.
-func (s *Coder) Stop() error {
-	return nil
-}
