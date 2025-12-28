@@ -26,6 +26,17 @@ import (
 // Tuple represents a tuple of elements that can be packed into a sortable byte sequence.
 type Tuple []any
 
+const (
+	markerNull   byte = 0x00
+	markerTrue   byte = 0x01
+	markerFalse  byte = 0x02
+	markerInt    byte = 0x10
+	markerUint   byte = 0x11
+	markerFloat  byte = 0x20
+	markerString byte = 0x30
+	markerBytes  byte = 0x40
+)
+
 // Pack encodes the tuple into a byte slice using gob encoding.
 func (t Tuple) Pack() ([]byte, error) {
 	packed, err := t.packSimple()
@@ -41,47 +52,47 @@ func (t Tuple) packSimple() ([]byte, error) {
 	for _, elem := range t {
 		switch v := elem.(type) {
 		case nil:
-			buf.WriteByte(0x00) // null marker
+			buf.WriteByte(markerNull)
 		case bool:
 			if v {
-				buf.WriteByte(0x01) // true marker
+				buf.WriteByte(markerTrue)
 			} else {
-				buf.WriteByte(0x02) // false marker
+				buf.WriteByte(markerFalse)
 			}
 		case int, int8, int16, int32, int64:
-			buf.WriteByte(0x10) // int marker
+			buf.WriteByte(markerInt)
 			var tv int64
 			if err := safecast.ToInt64(v, &tv); err != nil {
 				return nil, err
 			}
 			binary.Write(&buf, binary.BigEndian, tv)
 		case uint, uint8, uint16, uint32, uint64:
-			buf.WriteByte(0x11) // uint marker
+			buf.WriteByte(markerUint)
 			var tv uint64
 			if err := safecast.ToUint64(v, &tv); err != nil {
 				return nil, err
 			}
 			binary.Write(&buf, binary.BigEndian, tv)
 		case float32, float64:
-			buf.WriteByte(0x20) // float marker
+			buf.WriteByte(markerFloat)
 			var tv float64
 			if err := safecast.ToFloat64(v, &tv); err != nil {
 				return nil, err
 			}
 			binary.Write(&buf, binary.BigEndian, tv)
 		case string:
-			buf.WriteByte(0x30) // string marker
+			buf.WriteByte(markerString)
 			data := []byte(v)
 			binary.Write(&buf, binary.BigEndian, uint32(len(data)))
 			buf.Write(data)
 		case []byte:
-			buf.WriteByte(0x40) // bytes marker
+			buf.WriteByte(markerBytes)
 			binary.Write(&buf, binary.BigEndian, uint32(len(v)))
 			buf.Write(v)
 		default:
 			// Convert unknown types to strings
 			str := fmt.Sprintf("%v", v)
-			buf.WriteByte(0x30) // string marker
+			buf.WriteByte(markerString)
 			data := []byte(str)
 			binary.Write(&buf, binary.BigEndian, uint32(len(data)))
 			buf.Write(data)
@@ -108,34 +119,34 @@ func unpackSimple(data []byte) (Tuple, error) {
 		}
 
 		switch marker {
-		case 0x00: // null
+		case markerNull:
 			tuple = append(tuple, nil)
-		case 0x01: // true
+		case markerTrue:
 			tuple = append(tuple, true)
-		case 0x02: // false
+		case markerFalse:
 			tuple = append(tuple, false)
-		case 0x10: // int
+		case markerInt:
 			var val int64
 			err := binary.Read(buf, binary.BigEndian, &val)
 			if err != nil {
 				return nil, err
 			}
 			tuple = append(tuple, val)
-		case 0x11: // uint
+		case markerUint:
 			var val uint64
 			err := binary.Read(buf, binary.BigEndian, &val)
 			if err != nil {
 				return nil, err
 			}
 			tuple = append(tuple, val)
-		case 0x20: // float
+		case markerFloat:
 			var val float64
 			err := binary.Read(buf, binary.BigEndian, &val)
 			if err != nil {
 				return nil, err
 			}
 			tuple = append(tuple, val)
-		case 0x30: // string
+		case markerString:
 			var length uint32
 			err := binary.Read(buf, binary.BigEndian, &length)
 			if err != nil {
@@ -147,7 +158,7 @@ func unpackSimple(data []byte) (Tuple, error) {
 				return nil, err
 			}
 			tuple = append(tuple, string(data))
-		case 0x40: // bytes
+		case markerBytes:
 			var length uint32
 			err := binary.Read(buf, binary.BigEndian, &length)
 			if err != nil {
