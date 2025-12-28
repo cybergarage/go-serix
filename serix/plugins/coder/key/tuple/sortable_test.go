@@ -150,11 +150,11 @@ func TestStringRoundTrip(t *testing.T) {
 		"b",
 		"hello",
 		"world",
-		"a\x00b",           // embedded null
-		"\x00",             // single null
-		"\x00\x00",         // double null
-		"test\x00test",     // null in middle
-		"UTF-8: 日本語",    // UTF-8 characters
+		"a\x00b",       // embedded null
+		"\x00",         // single null
+		"\x00\x00",     // double null
+		"test\x00test", // null in middle
+		"UTF-8: 日本語",   // UTF-8 characters
 	}
 
 	for _, expected := range testCases {
