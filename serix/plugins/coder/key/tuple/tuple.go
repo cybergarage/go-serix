@@ -50,7 +50,8 @@ const (
 	stringTermNext   byte = 0x00
 )
 
-// Pack encodes the tuple into a byte slice using gob encoding.
+// Pack encodes the tuple into a byte slice using sortable encoding.
+// Int, float, and string types are encoded to be bytewise-sortable for RocksDB.
 func (t Tuple) Pack() ([]byte, error) {
 	packed, err := t.packSimple()
 	if err != nil {
