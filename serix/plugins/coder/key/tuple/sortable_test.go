@@ -20,7 +20,7 @@ import (
 	"testing"
 )
 
-// TestIntRoundTrip tests round-trip encoding/decoding of integers
+// TestIntRoundTrip tests round-trip encoding/decoding of integers.
 func TestIntRoundTrip(t *testing.T) {
 	testCases := []int64{
 		math.MinInt64,
@@ -65,14 +65,14 @@ func TestIntRoundTrip(t *testing.T) {
 	}
 }
 
-// TestFloatRoundTrip tests round-trip encoding/decoding of floats
+// TestFloatRoundTrip tests round-trip encoding/decoding of floats.
 func TestFloatRoundTrip(t *testing.T) {
 	testCases := []float64{
 		math.Inf(-1),
 		-1000.5,
 		-1.0,
 		-0.5,
-		-0.0,
+		math.Copysign(0, -1),
 		0.0,
 		0.5,
 		1.0,
@@ -114,7 +114,7 @@ func TestFloatRoundTrip(t *testing.T) {
 	}
 }
 
-// TestFloatNaNRoundTrip tests that NaN roundtrips (bits may differ but should still be NaN)
+// TestFloatNaNRoundTrip tests that NaN roundtrips (bits may differ but should still be NaN).
 func TestFloatNaNRoundTrip(t *testing.T) {
 	tpl := Tuple{math.NaN()}
 	encoded, err := tpl.Pack()
@@ -141,7 +141,7 @@ func TestFloatNaNRoundTrip(t *testing.T) {
 	}
 }
 
-// TestStringRoundTrip tests round-trip encoding/decoding of strings
+// TestStringRoundTrip tests round-trip encoding/decoding of strings.
 func TestStringRoundTrip(t *testing.T) {
 	testCases := []string{
 		"",
@@ -188,7 +188,7 @@ func TestStringRoundTrip(t *testing.T) {
 	}
 }
 
-// TestIntSortOrder tests that integer tuples sort in numeric order
+// TestIntSortOrder tests that integer tuples sort in numeric order.
 func TestIntSortOrder(t *testing.T) {
 	// Values in expected sort order
 	values := []int64{
@@ -215,7 +215,7 @@ func TestIntSortOrder(t *testing.T) {
 	}
 
 	// Verify each pair is in correct order
-	for i := 0; i < len(encodings)-1; i++ {
+	for i := range len(encodings) - 1 {
 		cmp := bytes.Compare(encodings[i], encodings[i+1])
 		if cmp >= 0 {
 			t.Errorf("Sort order violation: %d (% x) should be < %d (% x), but bytes.Compare = %d",
@@ -224,7 +224,7 @@ func TestIntSortOrder(t *testing.T) {
 	}
 }
 
-// TestFloatSortOrder tests that float tuples sort in numeric order (excluding NaN)
+// TestFloatSortOrder tests that float tuples sort in numeric order (excluding NaN).
 func TestFloatSortOrder(t *testing.T) {
 	// Values in expected sort order
 	values := []float64{
@@ -232,7 +232,7 @@ func TestFloatSortOrder(t *testing.T) {
 		-1000.5,
 		-1.0,
 		-0.5,
-		-0.0, // Note: -0.0 and 0.0 encode the same
+		math.Copysign(0, -1), // Note: -0.0 and 0.0 encode the same
 		0.0,
 		0.5,
 		1.0,
@@ -252,7 +252,7 @@ func TestFloatSortOrder(t *testing.T) {
 	}
 
 	// Verify each pair is in correct order (or equal for -0.0 and 0.0)
-	for i := 0; i < len(encodings)-1; i++ {
+	for i := range len(encodings) - 1 {
 		cmp := bytes.Compare(encodings[i], encodings[i+1])
 		if cmp > 0 {
 			t.Errorf("Sort order violation: %f (% x) should be <= %f (% x), but bytes.Compare = %d",
@@ -261,7 +261,7 @@ func TestFloatSortOrder(t *testing.T) {
 	}
 }
 
-// TestStringSortOrder tests that string tuples sort in lexicographic order
+// TestStringSortOrder tests that string tuples sort in lexicographic order.
 func TestStringSortOrder(t *testing.T) {
 	// Values in expected sort order
 	values := []string{
@@ -292,7 +292,7 @@ func TestStringSortOrder(t *testing.T) {
 	}
 
 	// Verify each pair is in correct order
-	for i := 0; i < len(encodings)-1; i++ {
+	for i := range len(encodings) - 1 {
 		cmp := bytes.Compare(encodings[i], encodings[i+1])
 		if cmp >= 0 {
 			t.Errorf("Sort order violation: %q (% x) should be < %q (% x), but bytes.Compare = %d",
@@ -301,7 +301,7 @@ func TestStringSortOrder(t *testing.T) {
 	}
 }
 
-// TestMixedTupleSortOrder tests that mixed-type tuples sort correctly
+// TestMixedTupleSortOrder tests that mixed-type tuples sort correctly.
 func TestMixedTupleSortOrder(t *testing.T) {
 	// Test that tuples with different first elements sort by first element
 	testCases := []struct {
@@ -339,7 +339,7 @@ func TestMixedTupleSortOrder(t *testing.T) {
 			}
 
 			// Verify each pair is in correct order
-			for i := 0; i < len(encodings)-1; i++ {
+			for i := range len(encodings) - 1 {
 				cmp := bytes.Compare(encodings[i], encodings[i+1])
 				if cmp >= 0 {
 					t.Errorf("Sort order violation: %v (% x) should be < %v (% x), but bytes.Compare = %d",

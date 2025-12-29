@@ -43,7 +43,7 @@ const (
 )
 
 const (
-	// String encoding uses escape sequences
+	// String encoding uses escape sequences.
 	stringEscapeByte byte = 0x00
 	stringEscapeNext byte = 0xFF
 	stringTerminator byte = 0x00
