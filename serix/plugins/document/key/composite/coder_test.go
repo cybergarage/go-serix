@@ -21,5 +21,5 @@ import (
 )
 
 func TestCompositeCoder(t *testing.T) {
-	key.RoundTripTest(t, NewCoder())
+	key.CoderTest(t, NewCoder())
 }

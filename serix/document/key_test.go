@@ -5,7 +5,6 @@ import (
 )
 
 func TestKeyCompare(t *testing.T) {
-
 	t.Run("equal", func(t *testing.T) {
 		cases := []struct {
 			a Key

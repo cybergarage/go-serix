@@ -15,358 +15,172 @@
 package key
 
 import (
+	"bytes"
+	"math"
 	"testing"
 
 	"github.com/cybergarage/go-serix/serix/document"
 )
 
+// SortableTest tests that the given coder produces sortable encodings for various key types.
 func SortableTest(t *testing.T, coder document.KeyCoder) {
 	t.Helper()
-	/*
 
-		t.Run("IntRoundTrip", func(t *testing.T) {
-			testCases := []int64{
-				math.MinInt64,
-				-1000,
-				-2,
-				-1,
-				0,
-				1,
-				2,
-				1000,
-				math.MaxInt64,
+	t.Run("int", func(t *testing.T) {
+		// Values in expected sort order
+		values := []int64{
+			math.MinInt64,
+			-1000,
+			-2,
+			-1,
+			0,
+			1,
+			2,
+			1000,
+			math.MaxInt64,
+		}
+
+		// Encode all values
+		var encodings [][]byte
+		for _, v := range values {
+			key := document.NewKeyWith(v)
+			encoded, err := coder.EncodeKey(key)
+			if err != nil {
+				t.Fatalf("Encode failed for %d: %v", v, err)
 			}
+			encodings = append(encodings, encoded)
+		}
 
-			for _, expected := range testCases {
-				tpl := Tuple{expected}
-				encoded, err := tpl.Pack()
-				if err != nil {
-					t.Errorf("Pack failed for %d: %v", expected, err)
-					continue
-				}
-
-				decoded, err := Unpack(encoded)
-				if err != nil {
-					t.Errorf("Unpack failed for %d: %v", expected, err)
-					continue
-				}
-
-				if len(decoded) != 1 {
-					t.Errorf("Expected 1 element, got %d", len(decoded))
-					continue
-				}
-
-				actual, ok := decoded[0].(int64)
-				if !ok {
-					t.Errorf("Expected int64, got %T", decoded[0])
-					continue
-				}
-
-				if actual != expected {
-					t.Errorf("Expected %d, got %d", expected, actual)
-				}
+		// Verify each pair is in correct order
+		for i := range len(encodings) - 1 {
+			cmp := bytes.Compare(encodings[i], encodings[i+1])
+			if cmp >= 0 {
+				t.Errorf("Sort order violation: %d (% x) should be < %d (% x), but bytes.Compare = %d",
+					values[i], encodings[i], values[i+1], encodings[i+1], cmp)
 			}
-		})
-	*/
-}
+		}
+	})
 
-/*
-// IntRoundTrip tests round-trip encoding/decoding of integers.
-func IntRoundTrip(t *testing.T) {
-	t.Helper()
-
-}
-
-// FloatRoundTrip tests round-trip encoding/decoding of floats.
-func FloatRoundTrip(t *testing.T) {
-	t.Helper()
-	testCases := []float64{
-		math.Inf(-1),
-		-1000.5,
-		-1.0,
-		-0.5,
-		math.Copysign(0, -1),
-		0.0,
-		0.5,
-		1.0,
-		1000.5,
-		math.Inf(1),
-	}
-
-	for _, expected := range testCases {
-		tpl := Tuple{expected}
-		encoded, err := tpl.Pack()
-		if err != nil {
-			t.Errorf("Pack failed for %f: %v", expected, err)
-			continue
+	t.Run("float64", func(t *testing.T) {
+		// Values in expected sort order
+		values := []float64{
+			math.Inf(-1),
+			-1000.5,
+			-1.0,
+			-0.5,
+			math.Copysign(0, -1), // Note: -0.0 and 0.0 encode the same
+			0.0,
+			0.5,
+			1.0,
+			1000.5,
+			math.Inf(1),
 		}
 
-		decoded, err := Unpack(encoded)
-		if err != nil {
-			t.Errorf("Unpack failed for %f: %v", expected, err)
-			continue
+		// Encode all values
+		var encodings [][]byte
+		for _, v := range values {
+			key := document.NewKeyWith(v)
+			encoded, err := coder.EncodeKey(key)
+			if err != nil {
+				t.Fatalf("Encode failed for %f: %v", v, err)
+			}
+			encodings = append(encodings, encoded)
 		}
 
-		if len(decoded) != 1 {
-			t.Errorf("Expected 1 element, got %d", len(decoded))
-			continue
+		// Verify each pair is in correct order (or equal for -0.0 and 0.0)
+		for i := range len(encodings) - 1 {
+			cmp := bytes.Compare(encodings[i], encodings[i+1])
+			if cmp > 0 {
+				t.Errorf("Sort order violation: %f (% x) should be <= %f (% x), but bytes.Compare = %d",
+					values[i], encodings[i], values[i+1], encodings[i+1], cmp)
+			}
+		}
+	})
+
+	t.Run("float64", func(t *testing.T) {
+		// Values in expected sort order
+		values := []string{
+			"",
+			"\x00",
+			"\x00\x00",
+			"a",
+			"a\x00",
+			"a\x00b",
+			"aa",
+			"aaa",
+			"ab",
+			"b",
+			"ba",
+			"hello",
+			"world",
 		}
 
-		actual, ok := decoded[0].(float64)
-		if !ok {
-			t.Errorf("Expected float64, got %T", decoded[0])
-			continue
+		// Encode all values
+		var encodings [][]byte
+		for _, v := range values {
+			key := document.NewKeyWith(v)
+			encoded, err := coder.EncodeKey(key)
+			if err != nil {
+				t.Fatalf("Encode failed for %q: %v", v, err)
+			}
+			encodings = append(encodings, encoded)
 		}
 
-		// Handle -0.0 vs 0.0 (both have same encoding)
-		if math.Float64bits(actual) != math.Float64bits(expected) {
-			t.Errorf("Expected %f (bits: %x), got %f (bits: %x)",
-				expected, math.Float64bits(expected),
-				actual, math.Float64bits(actual))
+		// Verify each pair is in correct order
+		for i := range len(encodings) - 1 {
+			cmp := bytes.Compare(encodings[i], encodings[i+1])
+			if cmp >= 0 {
+				t.Errorf("Sort order violation: %q (% x) should be < %q (% x), but bytes.Compare = %d",
+					values[i], encodings[i], values[i+1], encodings[i+1], cmp)
+			}
 		}
-	}
-}
+	})
 
-// FloatNaNRoundTrip tests that NaN roundtrips (bits may differ but should still be NaN).
-func FloatNaNRoundTrip(t *testing.T) {
-	t.Helper()
-	tpl := Tuple{math.NaN()}
-	encoded, err := tpl.Pack()
-	if err != nil {
-		t.Fatalf("Pack failed for NaN: %v", err)
-	}
-
-	decoded, err := Unpack(encoded)
-	if err != nil {
-		t.Fatalf("Unpack failed for NaN: %v", err)
-	}
-
-	if len(decoded) != 1 {
-		t.Fatalf("Expected 1 element, got %d", len(decoded))
-	}
-
-	actual, ok := decoded[0].(float64)
-	if !ok {
-		t.Fatalf("Expected float64, got %T", decoded[0])
-	}
-
-	if !math.IsNaN(actual) {
-		t.Errorf("Expected NaN, got %f", actual)
-	}
-}
-
-// StringRoundTrip tests round-trip encoding/decoding of strings.
-func StringRoundTrip(t *testing.T) {
-	t.Helper()
-	testCases := []string{
-		"",
-		"a",
-		"aa",
-		"b",
-		"hello",
-		"world",
-		"a\x00b",       // embedded null
-		"\x00",         // single null
-		"\x00\x00",     // double null
-		"test\x00test", // null in middle
-		"UTF-8: 日本語",   // UTF-8 characters
-	}
-
-	for _, expected := range testCases {
-		tpl := Tuple{expected}
-		encoded, err := tpl.Pack()
-		if err != nil {
-			t.Errorf("Pack failed for %q: %v", expected, err)
-			continue
-		}
-
-		decoded, err := Unpack(encoded)
-		if err != nil {
-			t.Errorf("Unpack failed for %q: %v", expected, err)
-			continue
-		}
-
-		if len(decoded) != 1 {
-			t.Errorf("Expected 1 element, got %d", len(decoded))
-			continue
-		}
-
-		actual, ok := decoded[0].(string)
-		if !ok {
-			t.Errorf("Expected string, got %T", decoded[0])
-			continue
-		}
-
-		if actual != expected {
-			t.Errorf("Expected %q, got %q", expected, actual)
-		}
-	}
-}
-
-// IntSortOrder tests that integer tuples sort in numeric order.
-func IntSortOrder(t *testing.T) {
-	t.Helper()
-
-	// Values in expected sort order
-	values := []int64{
-		math.MinInt64,
-		-1000,
-		-2,
-		-1,
-		0,
-		1,
-		2,
-		1000,
-		math.MaxInt64,
-	}
-
-	// Encode all values
-	var encodings [][]byte
-	for _, v := range values {
-		tpl := Tuple{v}
-		encoded, err := tpl.Pack()
-		if err != nil {
-			t.Fatalf("Pack failed for %d: %v", v, err)
-		}
-		encodings = append(encodings, encoded)
-	}
-
-	// Verify each pair is in correct order
-	for i := range len(encodings) - 1 {
-		cmp := bytes.Compare(encodings[i], encodings[i+1])
-		if cmp >= 0 {
-			t.Errorf("Sort order violation: %d (% x) should be < %d (% x), but bytes.Compare = %d",
-				values[i], encodings[i], values[i+1], encodings[i+1], cmp)
-		}
-	}
-}
-
-// FloatSortOrder tests that float tuples sort in numeric order (excluding NaN).
-func FloatSortOrder(t *testing.T) {
-	t.Helper()
-	// Values in expected sort order
-	values := []float64{
-		math.Inf(-1),
-		-1000.5,
-		-1.0,
-		-0.5,
-		math.Copysign(0, -1), // Note: -0.0 and 0.0 encode the same
-		0.0,
-		0.5,
-		1.0,
-		1000.5,
-		math.Inf(1),
-	}
-
-	// Encode all values
-	var encodings [][]byte
-	for _, v := range values {
-		tpl := Tuple{v}
-		encoded, err := tpl.Pack()
-		if err != nil {
-			t.Fatalf("Pack failed for %f: %v", v, err)
-		}
-		encodings = append(encodings, encoded)
-	}
-
-	// Verify each pair is in correct order (or equal for -0.0 and 0.0)
-	for i := range len(encodings) - 1 {
-		cmp := bytes.Compare(encodings[i], encodings[i+1])
-		if cmp > 0 {
-			t.Errorf("Sort order violation: %f (% x) should be <= %f (% x), but bytes.Compare = %d",
-				values[i], encodings[i], values[i+1], encodings[i+1], cmp)
-		}
-	}
-}
-
-// StringSortOrder tests that string tuples sort in lexicographic order.
-func StringSortOrder(t *testing.T) {
-	t.Helper()
-
-	// Values in expected sort order
-	values := []string{
-		"",
-		"\x00",
-		"\x00\x00",
-		"a",
-		"a\x00",
-		"a\x00b",
-		"aa",
-		"aaa",
-		"ab",
-		"b",
-		"ba",
-		"hello",
-		"world",
-	}
-
-	// Encode all values
-	var encodings [][]byte
-	for _, v := range values {
-		tpl := Tuple{v}
-		encoded, err := tpl.Pack()
-		if err != nil {
-			t.Fatalf("Pack failed for %q: %v", v, err)
-		}
-		encodings = append(encodings, encoded)
-	}
-
-	// Verify each pair is in correct order
-	for i := range len(encodings) - 1 {
-		cmp := bytes.Compare(encodings[i], encodings[i+1])
-		if cmp >= 0 {
-			t.Errorf("Sort order violation: %q (% x) should be < %q (% x), but bytes.Compare = %d",
-				values[i], encodings[i], values[i+1], encodings[i+1], cmp)
-		}
-	}
-}
-
-// MixedTupleSortOrder tests that mixed-type tuples sort correctly.
-func MixedTupleSortOrder(t *testing.T) {
-	//  that tuples with different first elements sort by first element
-	testCases := []struct {
-		name   string
-		tuples []Tuple
-	}{
-		{
-			name: "int_then_string",
-			tuples: []Tuple{
-				{int64(1), "a"},
-				{int64(1), "b"},
-				{int64(2), "a"},
+	t.Run("float64", func(t *testing.T) {
+		//  that tuples with different first elements sort by first element
+		testCases := []struct {
+			name string
+			keys []document.Key
+		}{
+			{
+				name: "int_then_string",
+				keys: []document.Key{
+					document.NewKeyWith(int64(1), "a"),
+					document.NewKeyWith(int64(1), "b"),
+					document.NewKeyWith(int64(2), "a"),
+				},
 			},
-		},
-		{
-			name: "string_then_int",
-			tuples: []Tuple{
-				{"a", int64(1)},
-				{"a", int64(2)},
-				{"b", int64(1)},
+			{
+				name: "string_then_int",
+				keys: []document.Key{
+					document.NewKeyWith("a", int64(1)),
+					document.NewKeyWith("a", int64(2)),
+					document.NewKeyWith("b", int64(1)),
+				},
 			},
-		},
-	}
+		}
 
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			// Encode all tuples
-			var encodings [][]byte
-			for _, tpl := range tc.tuples {
-				encoded, err := tpl.Pack()
-				if err != nil {
-					t.Fatalf("Pack failed for %v: %v", tpl, err)
+		for _, tc := range testCases {
+			t.Run(tc.name, func(t *testing.T) {
+				// Encode all tuples
+				var encodings [][]byte
+				for _, key := range tc.keys {
+					encoded, err := coder.EncodeKey(key)
+					if err != nil {
+						t.Fatalf("Encode failed for %v: %v", key, err)
+					}
+					encodings = append(encodings, encoded)
 				}
-				encodings = append(encodings, encoded)
-			}
 
-			// Verify each pair is in correct order
-			for i := range len(encodings) - 1 {
-				cmp := bytes.Compare(encodings[i], encodings[i+1])
-				if cmp >= 0 {
-					t.Errorf("Sort order violation: %v (% x) should be < %v (% x), but bytes.Compare = %d",
-						tc.tuples[i], encodings[i], tc.tuples[i+1], encodings[i+1], cmp)
+				// Verify each pair is in correct order
+				for i := range len(encodings) - 1 {
+					cmp := bytes.Compare(encodings[i], encodings[i+1])
+					if cmp >= 0 {
+						t.Errorf("Sort order violation: %v (% x) should be < %v (% x), but bytes.Compare = %d",
+							tc.keys[i], encodings[i], tc.keys[i+1], encodings[i+1], cmp)
+					}
 				}
-			}
-		})
-	}
+			})
+		}
+	})
 }
-*/

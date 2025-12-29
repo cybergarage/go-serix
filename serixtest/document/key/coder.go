@@ -39,7 +39,7 @@ func deepEqual(x, y any) error {
 }
 
 // KeyCoderTest tests the encoding and decoding of keys using the provided KeyCoder.
-// nolint:goerr113, gocognit, gci, gocyclo, gosec, maintidx
+// nolint: gocognit, gci, gocyclo, gosec, maintidx
 func RoundTripTest(t *testing.T, coder document.KeyCoder) {
 	t.Helper()
 
