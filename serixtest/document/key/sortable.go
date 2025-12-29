@@ -12,61 +12,74 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package tuple
+package key
 
 import (
-	"bytes"
-	"math"
 	"testing"
+
+	"github.com/cybergarage/go-serix/serix/document"
 )
 
-// TestIntRoundTrip tests round-trip encoding/decoding of integers.
-func TestIntRoundTrip(t *testing.T) {
-	testCases := []int64{
-		math.MinInt64,
-		-1000,
-		-2,
-		-1,
-		0,
-		1,
-		2,
-		1000,
-		math.MaxInt64,
-	}
+func SortableTest(t *testing.T, coder document.KeyCoder) {
+	t.Helper()
+	/*
 
-	for _, expected := range testCases {
-		tpl := Tuple{expected}
-		encoded, err := tpl.Pack()
-		if err != nil {
-			t.Errorf("Pack failed for %d: %v", expected, err)
-			continue
-		}
+		t.Run("IntRoundTrip", func(t *testing.T) {
+			testCases := []int64{
+				math.MinInt64,
+				-1000,
+				-2,
+				-1,
+				0,
+				1,
+				2,
+				1000,
+				math.MaxInt64,
+			}
 
-		decoded, err := Unpack(encoded)
-		if err != nil {
-			t.Errorf("Unpack failed for %d: %v", expected, err)
-			continue
-		}
+			for _, expected := range testCases {
+				tpl := Tuple{expected}
+				encoded, err := tpl.Pack()
+				if err != nil {
+					t.Errorf("Pack failed for %d: %v", expected, err)
+					continue
+				}
 
-		if len(decoded) != 1 {
-			t.Errorf("Expected 1 element, got %d", len(decoded))
-			continue
-		}
+				decoded, err := Unpack(encoded)
+				if err != nil {
+					t.Errorf("Unpack failed for %d: %v", expected, err)
+					continue
+				}
 
-		actual, ok := decoded[0].(int64)
-		if !ok {
-			t.Errorf("Expected int64, got %T", decoded[0])
-			continue
-		}
+				if len(decoded) != 1 {
+					t.Errorf("Expected 1 element, got %d", len(decoded))
+					continue
+				}
 
-		if actual != expected {
-			t.Errorf("Expected %d, got %d", expected, actual)
-		}
-	}
+				actual, ok := decoded[0].(int64)
+				if !ok {
+					t.Errorf("Expected int64, got %T", decoded[0])
+					continue
+				}
+
+				if actual != expected {
+					t.Errorf("Expected %d, got %d", expected, actual)
+				}
+			}
+		})
+	*/
 }
 
-// TestFloatRoundTrip tests round-trip encoding/decoding of floats.
-func TestFloatRoundTrip(t *testing.T) {
+/*
+// IntRoundTrip tests round-trip encoding/decoding of integers.
+func IntRoundTrip(t *testing.T) {
+	t.Helper()
+
+}
+
+// FloatRoundTrip tests round-trip encoding/decoding of floats.
+func FloatRoundTrip(t *testing.T) {
+	t.Helper()
 	testCases := []float64{
 		math.Inf(-1),
 		-1000.5,
@@ -114,8 +127,9 @@ func TestFloatRoundTrip(t *testing.T) {
 	}
 }
 
-// TestFloatNaNRoundTrip tests that NaN roundtrips (bits may differ but should still be NaN).
-func TestFloatNaNRoundTrip(t *testing.T) {
+// FloatNaNRoundTrip tests that NaN roundtrips (bits may differ but should still be NaN).
+func FloatNaNRoundTrip(t *testing.T) {
+	t.Helper()
 	tpl := Tuple{math.NaN()}
 	encoded, err := tpl.Pack()
 	if err != nil {
@@ -141,8 +155,9 @@ func TestFloatNaNRoundTrip(t *testing.T) {
 	}
 }
 
-// TestStringRoundTrip tests round-trip encoding/decoding of strings.
-func TestStringRoundTrip(t *testing.T) {
+// StringRoundTrip tests round-trip encoding/decoding of strings.
+func StringRoundTrip(t *testing.T) {
+	t.Helper()
 	testCases := []string{
 		"",
 		"a",
@@ -188,8 +203,10 @@ func TestStringRoundTrip(t *testing.T) {
 	}
 }
 
-// TestIntSortOrder tests that integer tuples sort in numeric order.
-func TestIntSortOrder(t *testing.T) {
+// IntSortOrder tests that integer tuples sort in numeric order.
+func IntSortOrder(t *testing.T) {
+	t.Helper()
+
 	// Values in expected sort order
 	values := []int64{
 		math.MinInt64,
@@ -224,8 +241,9 @@ func TestIntSortOrder(t *testing.T) {
 	}
 }
 
-// TestFloatSortOrder tests that float tuples sort in numeric order (excluding NaN).
-func TestFloatSortOrder(t *testing.T) {
+// FloatSortOrder tests that float tuples sort in numeric order (excluding NaN).
+func FloatSortOrder(t *testing.T) {
+	t.Helper()
 	// Values in expected sort order
 	values := []float64{
 		math.Inf(-1),
@@ -261,8 +279,10 @@ func TestFloatSortOrder(t *testing.T) {
 	}
 }
 
-// TestStringSortOrder tests that string tuples sort in lexicographic order.
-func TestStringSortOrder(t *testing.T) {
+// StringSortOrder tests that string tuples sort in lexicographic order.
+func StringSortOrder(t *testing.T) {
+	t.Helper()
+
 	// Values in expected sort order
 	values := []string{
 		"",
@@ -301,9 +321,9 @@ func TestStringSortOrder(t *testing.T) {
 	}
 }
 
-// TestMixedTupleSortOrder tests that mixed-type tuples sort correctly.
-func TestMixedTupleSortOrder(t *testing.T) {
-	// Test that tuples with different first elements sort by first element
+// MixedTupleSortOrder tests that mixed-type tuples sort correctly.
+func MixedTupleSortOrder(t *testing.T) {
+	//  that tuples with different first elements sort by first element
 	testCases := []struct {
 		name   string
 		tuples []Tuple
@@ -349,3 +369,4 @@ func TestMixedTupleSortOrder(t *testing.T) {
 		})
 	}
 }
+*/

@@ -45,6 +45,32 @@ func (key Key) Len() int {
 	return len(key)
 }
 
+// Compare compares the key with another key.
+func (key Key) Compare(other Key) (int, error) {
+	minLen := key.Len()
+	if other.Len() < minLen {
+		minLen = other.Len()
+	}
+
+	for n := range minLen {
+		cmp, err := safecast.Compare(key[n], other[n])
+		if err != nil {
+			return 0, fmt.Errorf("failed to compare key element %d: %w", n, err)
+		}
+		if cmp != 0 {
+			return cmp, nil
+		}
+	}
+
+	if key.Len() < other.Len() {
+		return -1, nil
+	}
+	if key.Len() > other.Len() {
+		return 1, nil
+	}
+	return 0, nil
+}
+
 // Equal reports whether the two keys are equal.
 func (key Key) Equal(other Key) bool {
 	for n, elem := range key {
