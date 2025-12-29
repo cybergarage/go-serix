@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package json
+package cbor
 
 import (
 	"testing"
 
-	"github.com/cybergarage/go-serix/serixtest/plugins/coder/document"
+	"github.com/cybergarage/go-serix/serixtest/document/object"
 )
 
-func TestJSONCoder(t *testing.T) {
-	document.ObjectCoderTest(t, NewCoder())
+func TestCBORCorder(t *testing.T) {
+	object.ObjectCoderTest(t, NewCoder())
 }

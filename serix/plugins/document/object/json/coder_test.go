@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package gzip
+package json
 
 import (
 	"testing"
 
-	"github.com/cybergarage/go-serix/serixtest/plugins/coder/document"
+	"github.com/cybergarage/go-serix/serixtest/document/object"
 )
 
-func TestGzipCoder(t *testing.T) {
-	document.BinaryCoderTest(t, NewCoder())
+func TestJSONCoder(t *testing.T) {
+	object.ObjectCoderTest(t, NewCoder())
 }

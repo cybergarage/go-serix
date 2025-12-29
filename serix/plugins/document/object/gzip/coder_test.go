@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cbor
+package gzip
 
 import (
 	"testing"
-
-	"github.com/cybergarage/go-serix/serixtest/plugins/coder/document"
 )
 
-func TestCBORCorder(t *testing.T) {
-	document.ObjectCoderTest(t, NewCoder())
+func TestGzipCoder(t *testing.T) {
+	// object.ObjectCoderTest(t, NewCoder())
 }

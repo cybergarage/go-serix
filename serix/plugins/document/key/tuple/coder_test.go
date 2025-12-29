@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package gob
+package tuple
 
 import (
 	"testing"
 
-	"github.com/cybergarage/go-serix/serixtest/plugins/coder/document"
+	"github.com/cybergarage/go-serix/serixtest/document/key"
 )
 
-func TestGOBCoder(t *testing.T) {
-	document.ObjectCoderTest(t, NewCoder())
+func TestTupleCorder(t *testing.T) {
+	key.KeyCoderTest(t, NewCoder())
 }
