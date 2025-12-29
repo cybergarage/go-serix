@@ -16,6 +16,8 @@ package document
 
 import (
 	"fmt"
+
+	"github.com/cybergarage/go-safecast/safecast"
 )
 
 // Key represents an unique key for a document object.
@@ -43,15 +45,10 @@ func (key Key) Len() int {
 	return len(key)
 }
 
-// Equals returns true if the specified key is equal to the key.
-func (key Key) Equals(other Key) bool {
-	if len(key) != len(other) {
-		return false
-	}
+// Equal reports whether the two keys are equal.
+func (key Key) Equal(other Key) bool {
 	for n, elem := range key {
-		es := fmt.Sprintf("%v", elem)
-		os := fmt.Sprintf("%v", other[n])
-		if es != os {
+		if !safecast.Equal(elem, other[n]) {
 			return false
 		}
 	}

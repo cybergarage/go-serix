@@ -88,7 +88,7 @@ func RoundTripTest(t *testing.T, coder document.KeyCoder) {
 			return
 		}
 
-		if !key.Equals(decKey) {
+		if !key.Equal(decKey) {
 			t.Errorf("%s != %s", key, decKey)
 			return
 		}
@@ -109,7 +109,7 @@ func RoundTripTest(t *testing.T, coder document.KeyCoder) {
 			return
 		}
 
-		if !key.Equals(decKey) {
+		if !key.Equal(decKey) {
 			t.Errorf("%s != %s", key, decKey)
 			return
 		}
@@ -131,7 +131,7 @@ func RoundTripTest(t *testing.T, coder document.KeyCoder) {
 			return
 		}
 
-		if !key.Equals(decKey) {
+		if !key.Equal(decKey) {
 			t.Errorf("%s != %s", key, decKey)
 			return
 		}
