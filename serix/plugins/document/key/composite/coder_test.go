@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package tuple
+package composite
 
 import (
 	"testing"
@@ -20,6 +20,6 @@ import (
 	"github.com/cybergarage/go-serix/serixtest/document/key"
 )
 
-func TestTupleCorder(t *testing.T) {
-	key.KeyCoderTest(t, NewCoder())
+func TestCompositeCoder(t *testing.T) {
+	key.RoundTripTest(t, NewCoder())
 }
