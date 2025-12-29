@@ -43,30 +43,6 @@ func (key Key) Len() int {
 	return len(key)
 }
 
-// Database returns the database name of the key.
-func (key Key) Database() (string, error) {
-	if key.Len() < 1 {
-		return "", newErrDatabaseKeyNotExist(key)
-	}
-	v, ok := key[0].(string)
-	if !ok {
-		return "", newErrDatabaseKeyNotExist(key)
-	}
-	return v, nil
-}
-
-// Collection returns the collection name of the key.
-func (key Key) Collection() (string, error) {
-	if key.Len() < 2 {
-		return "", newErrCollectionKeyNotExist(key)
-	}
-	v, ok := key[1].(string)
-	if !ok {
-		return "", newErrCollectionKeyNotExist(key)
-	}
-	return v, nil
-}
-
 // Equals returns true if the specified key is equal to the key.
 func (key Key) Equals(other Key) bool {
 	if len(key) != len(other) {
