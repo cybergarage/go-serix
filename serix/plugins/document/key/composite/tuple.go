@@ -102,7 +102,7 @@ func (t Tuple) packSimple() ([]byte, error) {
 				bits = ^bits
 			} else {
 				// Positive: flip only sign bit
-				bits = bits ^ (1 << 63)
+				bits ^= (1 << 63)
 			}
 			binary.Write(&buf, binary.BigEndian, bits)
 		case string:
@@ -206,6 +206,7 @@ func unpackSimple(data []byte) (Tuple, error) {
 		case markerString:
 			// Sortable string decoding: read until 0x00 0x00 terminator, unescape 0x00 0xFF -> 0x00
 			var data []byte
+		decodeString:
 			for {
 				b, err := buf.ReadByte()
 				if err != nil {
@@ -216,13 +217,14 @@ func unpackSimple(data []byte) (Tuple, error) {
 					if err != nil {
 						return nil, fmt.Errorf("unexpected end after escape byte")
 					}
-					if next == stringEscapeNext {
+					switch next {
+					case stringEscapeNext:
 						// Escaped 0x00
 						data = append(data, stringEscapeByte)
-					} else if next == stringTermNext {
+					case stringTermNext:
 						// Found terminator 0x00 0x00
-						break
-					} else {
+						break decodeString
+					default:
 						return nil, fmt.Errorf("invalid escape sequence: 0x00 0x%02x", next)
 					}
 				} else {
