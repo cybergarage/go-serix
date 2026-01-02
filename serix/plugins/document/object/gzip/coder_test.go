@@ -16,8 +16,10 @@ package gzip
 
 import (
 	"testing"
+
+	"github.com/cybergarage/go-serix/serixtest/document/object"
 )
 
 func TestGzipCoder(t *testing.T) {
-	// object.ObjectCoderSuite(t, NewCoder())
+	object.BinaryCoderSuite(t, NewCoder())
 }
