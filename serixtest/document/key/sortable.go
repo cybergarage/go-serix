@@ -22,8 +22,8 @@ import (
 	"github.com/cybergarage/go-serix/serix/document"
 )
 
-// SortableTest tests that the given coder produces sortable encodings for various key types.
-func SortableTest(t *testing.T, coder document.KeyCoder) {
+// SortableKeyTest tests that the given coder produces sortable encodings for various key types.
+func SortableKeyTest(t *testing.T, coder document.KeyCoder) {
 	t.Helper()
 
 	t.Run("int", func(t *testing.T) {

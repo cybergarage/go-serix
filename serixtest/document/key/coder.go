@@ -16,9 +16,7 @@ package key
 
 import (
 	_ "embed"
-	"fmt"
 	"math/rand"
-	"reflect"
 	"testing"
 
 	"github.com/cybergarage/go-pict/pict"
@@ -28,19 +26,9 @@ import (
 //go:embed go_types.pict
 var testKeyTypes []byte
 
-func deepEqual(x, y any) error {
-	if reflect.DeepEqual(x, y) {
-		return nil
-	}
-	if fmt.Sprintf("%v", x) == fmt.Sprintf("%v", y) {
-		return nil
-	}
-	return fmt.Errorf("%v != %v", x, y)
-}
-
-// KeyCoderTest tests the encoding and decoding of keys using the provided KeyCoder.
+// RoundTripKeyTest tests the encoding and decoding of keys using the provided KeyCoder.
 // nolint: gocognit, gci, gocyclo, gosec, maintidx
-func RoundTripTest(t *testing.T, coder document.KeyCoder) {
+func RoundTripKeyTest(t *testing.T, coder document.KeyCoder) {
 	t.Helper()
 
 	pict := pict.NewParserWithBytes(testKeyTypes)
