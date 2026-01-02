@@ -250,23 +250,3 @@ func arrayDocumentTest(t *testing.T, coder document.Coder) {
 		}
 	}
 }
-
-// ObjectCoderTest tests the specified document coder.
-func ObjectCoderTest(t *testing.T, coder document.Coder) {
-	t.Helper()
-
-	testFuncs := []struct {
-		name string
-		fn   func(*testing.T, document.Coder)
-	}{
-		{"primitive", primitiveDocumentTest},
-		{"array", arrayDocumentTest},
-		{"map", mapDocumentTest},
-	}
-
-	for _, testFunc := range testFuncs {
-		t.Run(testFunc.name, func(t *testing.T) {
-			testFunc.fn(t, coder)
-		})
-	}
-}

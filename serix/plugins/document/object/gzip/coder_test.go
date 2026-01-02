@@ -19,5 +19,5 @@ import (
 )
 
 func TestGzipCoder(t *testing.T) {
-	// object.ObjectCoderTest(t, NewCoder())
+	// object.ObjectCoderSuite(t, NewCoder())
 }

@@ -21,5 +21,5 @@ import (
 )
 
 func TestCBORCorder(t *testing.T) {
-	object.ObjectCoderTest(t, NewCoder())
+	object.ObjectCoderSuite(t, NewCoder())
 }

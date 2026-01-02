@@ -12,35 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package key
+package object
 
 import (
+	_ "embed"
 	"testing"
 
 	"github.com/cybergarage/go-serix/serix/document"
 )
 
-// KeyCoderTest tests the encoding and decoding of keys using the provided KeyCoder.
-func KeyCoderTest(t *testing.T, coder document.KeyCoder) {
+// ObjectCoderSuite tests the specified document coder.
+func ObjectCoderSuite(t *testing.T, coder document.Coder) {
 	t.Helper()
 
-	tests := []struct {
+	testFuncs := []struct {
 		name string
-		test func(t *testing.T, coder document.KeyCoder)
+		fn   func(*testing.T, document.Coder)
 	}{
-		{
-			name: "RoundTripKeyTest",
-			test: RoundTripKeyTest,
-		},
-		{
-			name: "SortableKeyTest",
-			test: SortableKeyTest,
-		},
+		{"primitive", primitiveDocumentTest},
+		{"array", arrayDocumentTest},
+		{"map", mapDocumentTest},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			tt.test(t, coder)
+	for _, testFunc := range testFuncs {
+		t.Run(testFunc.name, func(t *testing.T) {
+			testFunc.fn(t, coder)
 		})
 	}
 }

@@ -12,14 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package composite
+package key
 
 import (
 	"testing"
 
-	"github.com/cybergarage/go-serix/serixtest/document/key"
+	"github.com/cybergarage/go-serix/serix/document"
 )
 
-func TestCompositeCoder(t *testing.T) {
-	key.KeyCoderSuite(t, NewCoder())
+// KeyCoderSuite tests the encoding and decoding of keys using the provided KeyCoder.
+func KeyCoderSuite(t *testing.T, coder document.KeyCoder) {
+	t.Helper()
+
+	tests := []struct {
+		name string
+		test func(t *testing.T, coder document.KeyCoder)
+	}{
+		{
+			name: "RoundTripKeyTest",
+			test: RoundTripKeyTest,
+		},
+		{
+			name: "SortableKeyTest",
+			test: SortableKeyTest,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.test(t, coder)
+		})
+	}
 }
