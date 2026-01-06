@@ -18,22 +18,21 @@ import (
 	"bytes"
 	"errors"
 	"io"
-
-	"github.com/cybergarage/go-serix/serix/document"
 )
 
 type multiCorder struct {
-	coders []document.Coder
+	coders []Coder
 }
 
-func NewMultiCoder(coders ...document.Coder) document.Coder {
+// NewMultiCoder creates a new multi coder instance.
+func NewMultiCoder(coders ...Coder) Coder {
 	return &multiCorder{
 		coders: coders,
 	}
 }
 
 // EncodeDocument writes the specified object to the specified writer.
-func (m *multiCorder) EncodeDocument(w io.Writer, obj document.Object) error {
+func (m *multiCorder) EncodeDocument(w io.Writer, obj Object) error {
 	nextObject := obj
 	var lastWriter *bytes.Buffer
 	for _, coder := range m.coders {
@@ -55,7 +54,7 @@ func (m *multiCorder) EncodeDocument(w io.Writer, obj document.Object) error {
 }
 
 // DecodeDocument returns the decorded object from the specified reader if available, otherwise returns an error.
-func (m *multiCorder) DecodeDocument(r io.Reader) (document.Object, error) {
+func (m *multiCorder) DecodeDocument(r io.Reader) (Object, error) {
 	var lastErr error
 	for i := len(m.coders) - 1; i >= 0; i-- {
 		obj, err := m.coders[i].DecodeDocument(r)
