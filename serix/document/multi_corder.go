@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"errors"
 	"io"
+	"strings"
 )
 
 type multiCorder struct {
@@ -29,6 +30,15 @@ func NewMultiCoder(coders ...Coder) Coder {
 	return &multiCorder{
 		coders: coders,
 	}
+}
+
+// Name returns the name of the coder.
+func (m *multiCorder) Name() string {
+	names := make([]string, len(m.coders))
+	for i, coder := range m.coders {
+		names[i] = coder.Name()
+	}
+	return "multi(" + strings.Join(names, ",") + ")"
 }
 
 // EncodeObject writes the specified object to the specified writer.

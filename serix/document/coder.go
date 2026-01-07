@@ -32,6 +32,8 @@ type ObjectEncoder interface {
 
 // Coder represents an interface for encoding and decoding objects.
 type Coder interface {
+	// Name returns the name of the coder.
+	Name() string
 	ObjectDecoder
 	ObjectEncoder
 }

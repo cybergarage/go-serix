@@ -41,6 +41,11 @@ func NewCoder() *Coder {
 	return &Coder{}
 }
 
+// Name returns the name of the coder.
+func (s *Coder) Name() string {
+	return "gob"
+}
+
 // EncodeObject writes the specified object to the specified writer.
 func (s *Coder) EncodeObject(w io.Writer, obj document.Object) error {
 	encoder := gob.NewEncoder(w)
