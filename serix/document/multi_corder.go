@@ -41,6 +41,11 @@ func (m *multiCorder) Name() string {
 	return "multi(" + strings.Join(names, ",") + ")"
 }
 
+// Type returns the type of the coder.
+func (s *multiCorder) Type() CoderType {
+	return ObjectSerializer | ObjectCompressor
+}
+
 // EncodeObject writes the specified object to the specified writer.
 func (m *multiCorder) EncodeObject(w io.Writer, obj Object) error {
 	nextObject := obj

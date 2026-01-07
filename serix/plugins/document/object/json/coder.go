@@ -35,6 +35,11 @@ func (s *Coder) Name() string {
 	return "json"
 }
 
+// Type returns the type of the coder.
+func (s *Coder) Type() document.CoderType {
+	return document.ObjectSerializer
+}
+
 // EncodeObject writes the specified object to the specified writer.
 func (s *Coder) EncodeObject(w io.Writer, obj document.Object) error {
 	encoder := json.NewEncoder(w)

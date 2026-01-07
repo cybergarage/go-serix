@@ -34,6 +34,10 @@ type ObjectEncoder interface {
 type Coder interface {
 	// Name returns the name of the coder.
 	Name() string
+	// Type returns the type of the coder.
+	Type() CoderType
+	// ObjectDecoder returns the object decoder.
 	ObjectDecoder
+	// ObjectEncoder returns the object encoder.
 	ObjectEncoder
 }
