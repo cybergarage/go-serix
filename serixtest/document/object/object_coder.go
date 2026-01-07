@@ -66,14 +66,14 @@ func primitiveDocumentTest(t *testing.T, coder document.Coder) {
 				}
 
 				var w bytes.Buffer
-				err = coder.EncodeDocument(&w, obj)
+				err = coder.EncodeObject(&w, obj)
 				if err != nil {
 					t.Error(err)
 					return
 				}
 
 				r := bytes.NewReader(w.Bytes())
-				decObj, err := coder.DecodeDocument(r)
+				decObj, err := coder.DecodeObject(r)
 				if err != nil {
 					t.Error(err)
 					return
@@ -118,14 +118,14 @@ func mapDocumentTest(t *testing.T, coder document.Coder) {
 		}
 
 		var w bytes.Buffer
-		err = coder.EncodeDocument(&w, obj)
+		err = coder.EncodeObject(&w, obj)
 		if err != nil {
 			t.Error(err)
 			return
 		}
 
 		r := bytes.NewReader(w.Bytes())
-		decObj, err := coder.DecodeDocument(r)
+		decObj, err := coder.DecodeObject(r)
 		if err != nil {
 			t.Error(err)
 			return
@@ -178,14 +178,14 @@ func arrayDocumentTest(t *testing.T, coder document.Coder) {
 		// Non-shuffled array
 
 		var w bytes.Buffer
-		err = coder.EncodeDocument(&w, obj)
+		err = coder.EncodeObject(&w, obj)
 		if err != nil {
 			t.Error(err)
 			return
 		}
 
 		r := bytes.NewReader(w.Bytes())
-		decObj, err := coder.DecodeDocument(r)
+		decObj, err := coder.DecodeObject(r)
 		if err != nil {
 			t.Error(err)
 			return
@@ -203,14 +203,14 @@ func arrayDocumentTest(t *testing.T, coder document.Coder) {
 
 		shuffleArray(obj)
 
-		err = coder.EncodeDocument(&w, obj)
+		err = coder.EncodeObject(&w, obj)
 		if err != nil {
 			t.Error(err)
 			return
 		}
 
 		r = bytes.NewReader(w.Bytes())
-		decObj, err = coder.DecodeDocument(r)
+		decObj, err = coder.DecodeObject(r)
 		if err != nil {
 			t.Error(err)
 			return
@@ -229,7 +229,7 @@ func arrayDocumentTest(t *testing.T, coder document.Coder) {
 		nObj := rand.Intn(len(obj)-1) + 1
 		obj = obj[:nObj]
 
-		err = coder.EncodeDocument(&w, obj)
+		err = coder.EncodeObject(&w, obj)
 		if err != nil {
 			t.Error(err)
 			return
@@ -237,7 +237,7 @@ func arrayDocumentTest(t *testing.T, coder document.Coder) {
 
 		b := w.Bytes()
 		r = bytes.NewReader(b)
-		decObj, err = coder.DecodeDocument(r)
+		decObj, err = coder.DecodeObject(r)
 		if err != nil {
 			t.Error(err)
 			return

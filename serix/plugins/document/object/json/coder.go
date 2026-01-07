@@ -30,14 +30,14 @@ func NewCoder() *Coder {
 	return &Coder{}
 }
 
-// EncodeDocument writes the specified object to the specified writer.
-func (s *Coder) EncodeDocument(w io.Writer, obj document.Object) error {
+// EncodeObject writes the specified object to the specified writer.
+func (s *Coder) EncodeObject(w io.Writer, obj document.Object) error {
 	encoder := json.NewEncoder(w)
 	return encoder.Encode(obj)
 }
 
-// DecodeDocument returns the decoded object from the specified reader if available, otherwise returns an error.
-func (s *Coder) DecodeDocument(r io.Reader) (document.Object, error) {
+// DecodeObject returns the decoded object from the specified reader if available, otherwise returns an error.
+func (s *Coder) DecodeObject(r io.Reader) (document.Object, error) {
 	var obj document.Object
 	decoder := json.NewDecoder(r)
 	err := decoder.Decode(&obj)

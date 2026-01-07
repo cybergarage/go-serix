@@ -31,8 +31,8 @@ func NewMultiCoder(coders ...Coder) Coder {
 	}
 }
 
-// EncodeDocument writes the specified object to the specified writer.
-func (m *multiCorder) EncodeDocument(w io.Writer, obj Object) error {
+// EncodeObject writes the specified object to the specified writer.
+func (m *multiCorder) EncodeObject(w io.Writer, obj Object) error {
 	nextObject := obj
 	var lastWriter *bytes.Buffer
 	for _, coder := range m.coders {
@@ -41,7 +41,7 @@ func (m *multiCorder) EncodeDocument(w io.Writer, obj Object) error {
 		} else {
 			lastWriter.Reset()
 		}
-		if err := coder.EncodeDocument(lastWriter, nextObject); err != nil {
+		if err := coder.EncodeObject(lastWriter, nextObject); err != nil {
 			return err
 		}
 		nextObject = lastWriter.Bytes()
@@ -53,11 +53,11 @@ func (m *multiCorder) EncodeDocument(w io.Writer, obj Object) error {
 	return err
 }
 
-// DecodeDocument returns the decorded object from the specified reader if available, otherwise returns an error.
-func (m *multiCorder) DecodeDocument(r io.Reader) (Object, error) {
+// DecodeObject returns the decorded object from the specified reader if available, otherwise returns an error.
+func (m *multiCorder) DecodeObject(r io.Reader) (Object, error) {
 	var lastErr error
 	for i := len(m.coders) - 1; i >= 0; i-- {
-		obj, err := m.coders[i].DecodeDocument(r)
+		obj, err := m.coders[i].DecodeObject(r)
 		if err != nil {
 			lastErr = errors.Join(lastErr, err)
 			continue

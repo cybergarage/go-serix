@@ -30,14 +30,14 @@ func NewCoder() *Coder {
 	return &Coder{}
 }
 
-// EncodeDocument writes the specified object to the specified writer.
-func (s *Coder) EncodeDocument(w io.Writer, obj document.Object) error {
+// EncodeObject writes the specified object to the specified writer.
+func (s *Coder) EncodeObject(w io.Writer, obj document.Object) error {
 	cbor := cbor.NewEncoder(w)
 	return cbor.Encode(obj)
 }
 
-// DecodeDocument returns the decorded object from the specified reader if available, otherwise returns an error.
-func (s *Coder) DecodeDocument(r io.Reader) (document.Object, error) {
+// DecodeObject returns the decorded object from the specified reader if available, otherwise returns an error.
+func (s *Coder) DecodeObject(r io.Reader) (document.Object, error) {
 	cbor := cbor.NewDecoder(r)
 	return cbor.Decode()
 }

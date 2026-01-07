@@ -30,8 +30,8 @@ func NewCoder() *Coder {
 	return &Coder{}
 }
 
-// EncodeDocument writes the specified object to the specified writer.
-func (s *Coder) EncodeDocument(w io.Writer, obj document.Object) error {
+// EncodeObject writes the specified object to the specified writer.
+func (s *Coder) EncodeObject(w io.Writer, obj document.Object) error {
 	var data []byte
 	switch v := obj.(type) {
 	case []byte:
@@ -51,8 +51,8 @@ func (s *Coder) EncodeDocument(w io.Writer, obj document.Object) error {
 	return err
 }
 
-// DecodeDocument returns the decoded object from the specified reader if available, otherwise returns an error.
-func (s *Coder) DecodeDocument(r io.Reader) (document.Object, error) {
+// DecodeObject returns the decoded object from the specified reader if available, otherwise returns an error.
+func (s *Coder) DecodeObject(r io.Reader) (document.Object, error) {
 	// Create gzip reader
 	gzipReader, err := gzip.NewReader(r)
 	if err != nil {

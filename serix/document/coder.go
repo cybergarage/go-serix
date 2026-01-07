@@ -14,22 +14,24 @@
 
 package document
 
-import "io"
+import (
+	"io"
+)
 
-// An Decoder reads encorded objects from the specified input stream.
-type Decoder interface {
-	// DecodeDocument returns the decorded object from the specified reader if available, otherwise returns an error.
-	DecodeDocument(r io.Reader) (Object, error)
+// ObjectDecoder represets an interface for decoding objects from an input stream.
+type ObjectDecoder interface {
+	// DecodeObject reads an object from the specified reader.
+	DecodeObject(r io.Reader) (Object, error)
 }
 
-// An Encoder writes the specified object to the specified output stream.
-type Encoder interface {
-	// EncodeDocument writes the specified object to the specified writer.
-	EncodeDocument(w io.Writer, obj Object) error
+// ObjectEncoder represets an interface for encoding objects to an output stream.
+type ObjectEncoder interface {
+	// EncodeObject writes the specified object to the specified writer.
+	EncodeObject(w io.Writer, obj Object) error
 }
 
-// A Coder includes decoder and encoder interfaces.
+// Coder represents an interface for encoding and decoding objects.
 type Coder interface {
-	Decoder
-	Encoder
+	ObjectDecoder
+	ObjectEncoder
 }

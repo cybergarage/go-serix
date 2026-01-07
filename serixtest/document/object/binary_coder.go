@@ -51,13 +51,13 @@ func BinaryCoderTest(t *testing.T, coder document.Coder) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			w := bytes.NewBuffer(nil)
-			err := coder.EncodeDocument(w, test.obj)
+			err := coder.EncodeObject(w, test.obj)
 			if err != nil {
 				t.Fatalf("failed to encode: %v", err)
 			}
 
 			r := bytes.NewBuffer(w.Bytes())
-			decordedObj, err := coder.DecodeDocument(r)
+			decordedObj, err := coder.DecodeObject(r)
 			if err != nil {
 				t.Fatalf("failed to decode: %v", err)
 			}
