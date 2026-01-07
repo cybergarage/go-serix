@@ -40,7 +40,7 @@ func deepEqual(x, y any) error {
 	return fmt.Errorf("%v (%T) != %v (%T)", x, x, y, y)
 }
 
-func primitiveDocumentTest(t *testing.T, coder document.Coder) {
+func primitiveDocumentTest(t *testing.T, coder document.ObjectCoder) {
 	t.Helper()
 
 	pict := pict.NewParserWithBytes(goTypes)
@@ -89,7 +89,7 @@ func primitiveDocumentTest(t *testing.T, coder document.Coder) {
 	}
 }
 
-func mapDocumentTest(t *testing.T, coder document.Coder) {
+func mapDocumentTest(t *testing.T, coder document.ObjectCoder) {
 	t.Helper()
 
 	pict := pict.NewParserWithBytes(goTypes)
@@ -140,7 +140,7 @@ func mapDocumentTest(t *testing.T, coder document.Coder) {
 }
 
 // nolint:gosec
-func arrayDocumentTest(t *testing.T, coder document.Coder) {
+func arrayDocumentTest(t *testing.T, coder document.ObjectCoder) {
 	t.Helper()
 
 	pict := pict.NewParserWithBytes(goTypes)

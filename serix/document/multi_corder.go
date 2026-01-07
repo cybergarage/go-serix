@@ -22,11 +22,11 @@ import (
 )
 
 type multiCorder struct {
-	coders []Coder
+	coders []ObjectCoder
 }
 
 // NewMultiCoder creates a new multi coder instance.
-func NewMultiCoder(coders ...Coder) Coder {
+func NewMultiCoder(coders ...ObjectCoder) ObjectCoder {
 	return &multiCorder{
 		coders: coders,
 	}

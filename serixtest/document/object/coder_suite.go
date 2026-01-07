@@ -22,12 +22,12 @@ import (
 )
 
 // ObjectCoderSuite tests the specified document coder.
-func ObjectCoderSuite(t *testing.T, coder document.Coder) {
+func ObjectCoderSuite(t *testing.T, coder document.ObjectCoder) {
 	t.Helper()
 
 	testFuncs := []struct {
 		name string
-		fn   func(*testing.T, document.Coder)
+		fn   func(*testing.T, document.ObjectCoder)
 	}{
 		{"primitive", primitiveDocumentTest},
 		{"array", arrayDocumentTest},
@@ -42,12 +42,12 @@ func ObjectCoderSuite(t *testing.T, coder document.Coder) {
 }
 
 // BinaryCoderSuite tests the binary encoding and decoding using the provided Coder.
-func BinaryCoderSuite(t *testing.T, coder document.Coder) {
+func BinaryCoderSuite(t *testing.T, coder document.ObjectCoder) {
 	t.Helper()
 
 	testFuncs := []struct {
 		name string
-		fn   func(*testing.T, document.Coder)
+		fn   func(*testing.T, document.ObjectCoder)
 	}{
 		{"binary", BinaryCoderTest},
 	}

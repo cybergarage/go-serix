@@ -23,7 +23,7 @@ import (
 )
 
 // BinaryCoderTest tests the specified binary coder.
-func BinaryCoderTest(t *testing.T, coder document.Coder) {
+func BinaryCoderTest(t *testing.T, coder document.ObjectCoder) {
 	t.Helper()
 
 	tests := []struct {

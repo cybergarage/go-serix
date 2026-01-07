@@ -30,8 +30,8 @@ type ObjectEncoder interface {
 	EncodeObject(w io.Writer, obj Object) error
 }
 
-// Coder represents an interface for encoding and decoding objects.
-type Coder interface {
+// ObjectCoder represents an interface for encoding and decoding objects.
+type ObjectCoder interface {
 	// Name returns the name of the coder.
 	Name() string
 	// Type returns the type of the coder.
