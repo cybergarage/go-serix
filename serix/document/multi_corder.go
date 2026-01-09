@@ -21,36 +21,36 @@ import (
 	"strings"
 )
 
-type multiCorder struct {
+type chainCorder struct {
 	coders []ObjectCoder
 }
 
-// NewMultiCoder creates a new multi coder instance.
-func NewMultiCoder(coders ...ObjectCoder) ObjectCoder {
-	return &multiCorder{
+// NewChainCorder creates a new chain coder with the specified coders.
+func NewChainCorder(coders ...ObjectCoder) ObjectCoder {
+	return &chainCorder{
 		coders: coders,
 	}
 }
 
 // Name returns the name of the coder.
-func (m *multiCorder) Name() string {
-	names := make([]string, len(m.coders))
-	for i, coder := range m.coders {
+func (mc *chainCorder) Name() string {
+	names := make([]string, len(mc.coders))
+	for i, coder := range mc.coders {
 		names[i] = coder.Name()
 	}
 	return "multi(" + strings.Join(names, ",") + ")"
 }
 
 // Type returns the type of the coder.
-func (s *multiCorder) Type() CoderType {
+func (mc *chainCorder) Type() CoderType {
 	return ObjectSerializer | ObjectCompressor
 }
 
 // EncodeObject writes the specified object to the specified writer.
-func (m *multiCorder) EncodeObject(w io.Writer, obj Object) error {
+func (mc *chainCorder) EncodeObject(w io.Writer, obj Object) error {
 	nextObject := obj
 	var lastWriter *bytes.Buffer
-	for _, coder := range m.coders {
+	for _, coder := range mc.coders {
 		if lastWriter == nil {
 			lastWriter = bytes.NewBuffer(nil)
 		} else {
@@ -69,10 +69,10 @@ func (m *multiCorder) EncodeObject(w io.Writer, obj Object) error {
 }
 
 // DecodeObject returns the decorded object from the specified reader if available, otherwise returns an error.
-func (m *multiCorder) DecodeObject(r io.Reader) (Object, error) {
+func (mc *chainCorder) DecodeObject(r io.Reader) (Object, error) {
 	var lastErr error
-	for i := len(m.coders) - 1; i >= 0; i-- {
-		obj, err := m.coders[i].DecodeObject(r)
+	for i := len(mc.coders) - 1; i >= 0; i-- {
+		obj, err := mc.coders[i].DecodeObject(r)
 		if err != nil {
 			lastErr = errors.Join(lastErr, err)
 			continue
