@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package key
+package serixtest
 
 import (
 	"testing"
 
 	"github.com/cybergarage/go-serix/serix/document"
+	"github.com/cybergarage/go-serix/serixtest/document/key"
 )
 
 // KeyCoderSuite tests the encoding and decoding of keys using the provided KeyCoder.
@@ -30,11 +31,11 @@ func KeyCoderSuite(t *testing.T, coder document.KeyCoder) {
 	}{
 		{
 			name: "RoundTripKeyTest",
-			test: RoundTripKeyTest,
+			test: key.RoundTripKeyTest,
 		},
 		{
 			name: "SortableKeyTest",
-			test: SortableKeyTest,
+			test: key.SortableKeyTest,
 		},
 	}
 

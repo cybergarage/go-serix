@@ -17,9 +17,9 @@ package zlib
 import (
 	"testing"
 
-	"github.com/cybergarage/go-serix/serixtest/document/object"
+	"github.com/cybergarage/go-serix/serixtest"
 )
 
 func TestZlibCoder(t *testing.T) {
-	object.ObjectCompressorSuite(t, NewCoder())
+	serixtest.ObjectCompressorSuite(t, NewCoder())
 }

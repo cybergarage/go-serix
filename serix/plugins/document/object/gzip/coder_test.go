@@ -17,9 +17,9 @@ package gzip
 import (
 	"testing"
 
-	"github.com/cybergarage/go-serix/serixtest/document/object"
+	"github.com/cybergarage/go-serix/serixtest"
 )
 
 func TestGzipCoder(t *testing.T) {
-	object.ObjectCompressorSuite(t, NewCoder())
+	serixtest.ObjectCompressorSuite(t, NewCoder())
 }

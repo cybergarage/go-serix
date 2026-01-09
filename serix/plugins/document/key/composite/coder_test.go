@@ -17,9 +17,9 @@ package composite
 import (
 	"testing"
 
-	"github.com/cybergarage/go-serix/serixtest/document/key"
+	"github.com/cybergarage/go-serix/serixtest"
 )
 
 func TestCompositeCoder(t *testing.T) {
-	key.KeyCoderSuite(t, NewCoder())
+	serixtest.KeyCoderSuite(t, NewCoder())
 }

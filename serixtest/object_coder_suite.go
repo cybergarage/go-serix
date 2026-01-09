@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package object
+package serixtest
 
 import (
 	_ "embed"
 	"testing"
 
 	"github.com/cybergarage/go-serix/serix/document"
+	"github.com/cybergarage/go-serix/serixtest/document/object"
 )
 
 // ObjectSerializerSuite tests the specified document coder.
@@ -29,9 +30,9 @@ func ObjectSerializerSuite(t *testing.T, coder document.ObjectCoder) {
 		name string
 		fn   func(*testing.T, document.ObjectCoder)
 	}{
-		{"primitive", primitiveDocumentTest},
-		{"array", arrayDocumentTest},
-		{"map", mapDocumentTest},
+		{"primitive", object.PrimitiveObjectTest},
+		{"array", object.ArrayObjectTest},
+		{"map", object.MapObjectTest},
 	}
 
 	for _, testFunc := range testFuncs {
@@ -44,12 +45,38 @@ func ObjectSerializerSuite(t *testing.T, coder document.ObjectCoder) {
 // ObjectCompressorSuite tests the binary encoding and decoding using the provided Coder.
 func ObjectCompressorSuite(t *testing.T, coder document.ObjectCoder) {
 	t.Helper()
+	/*
+		cascadeBinaryCoderTest := func(t *testing.T, compressor document.ObjectCoder) {
+			t.Helper()
 
+			if compressor.Type() != document.ObjectCompressor {
+				t.Fatalf("expected document.ObjectCompressor, got %v", compressor.Type())
+			}
+
+			serializer := []document.ObjectCoder{}
+
+			mgr := plugins.NewManager()
+			for _, plugin := range mgr.ObjectCoders() {
+				if compressor.Type() == document.ObjectSerializer {
+					serializer = append(serializer, plugin)
+				}
+			}
+
+			for _, serializer := range serializer {
+				t.Run(serializer.Name()+" + "+compressor.Name(), func(t *testing.T) {
+					coder := document.NewChainCorder(serializer, compressor)
+					ObjectCompressorSuite(t, coder)
+				})
+			}
+
+		}
+	*/
 	testFuncs := []struct {
 		name string
 		fn   func(*testing.T, document.ObjectCoder)
 	}{
-		{"binary", BinaryCoderTest},
+		{"single", object.BinaryCoderTest},
+		// {"cascade", cascadeBinaryCoderTest},
 	}
 
 	for _, testFunc := range testFuncs {

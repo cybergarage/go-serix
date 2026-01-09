@@ -17,9 +17,9 @@ package json
 import (
 	"testing"
 
-	"github.com/cybergarage/go-serix/serixtest/document/object"
+	"github.com/cybergarage/go-serix/serixtest"
 )
 
 func TestJSONCoder(t *testing.T) {
-	object.ObjectSerializerSuite(t, NewCoder())
+	serixtest.ObjectSerializerSuite(t, NewCoder())
 }

@@ -85,13 +85,3 @@ func BinaryCoderTest(t *testing.T, coder document.ObjectCoder) {
 		})
 	}
 }
-
-// MultiBinaryCoderTest tests the specified binary coder.
-func MultiBinaryCoderTest(t *testing.T, coder document.ObjectCoder) {
-	t.Helper()
-
-	if coder.Type() != document.ObjectCompressor {
-		t.Fatalf("expected document.ObjectCompressor, got %v", coder.Type())
-	}
-	//	mgr := plugins.NewManager()
-}

@@ -17,9 +17,9 @@ package gob
 import (
 	"testing"
 
-	"github.com/cybergarage/go-serix/serixtest/document/object"
+	"github.com/cybergarage/go-serix/serixtest"
 )
 
 func TestGOBCoder(t *testing.T) {
-	object.ObjectSerializerSuite(t, NewCoder())
+	serixtest.ObjectSerializerSuite(t, NewCoder())
 }
