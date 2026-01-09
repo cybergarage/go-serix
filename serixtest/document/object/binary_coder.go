@@ -94,5 +94,4 @@ func MultiBinaryCoderTest(t *testing.T, coder document.ObjectCoder) {
 		t.Fatalf("expected document.ObjectCompressor, got %v", coder.Type())
 	}
 	//	mgr := plugins.NewManager()
-
 }

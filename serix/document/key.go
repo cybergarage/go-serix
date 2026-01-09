@@ -16,6 +16,7 @@ package document
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/cybergarage/go-safecast/safecast"
 )
@@ -47,10 +48,7 @@ func (key Key) Len() int {
 
 // Compare compares the key with another key.
 func (key Key) Compare(other Key) (int, error) {
-	minLen := key.Len()
-	if other.Len() < minLen {
-		minLen = other.Len()
-	}
+	minLen := min(other.Len(), key.Len())
 
 	for n := range minLen {
 		cmp, err := safecast.Compare(key[n], other[n])
@@ -83,9 +81,9 @@ func (key Key) Equal(other Key) bool {
 
 // String returns a string representation of the key.
 func (key Key) String() string {
-	var s string
+	var s strings.Builder
 	for _, elem := range key {
-		s += fmt.Sprintf("%v", elem)
+		s.WriteString(fmt.Sprintf("%v", elem))
 	}
-	return s
+	return s.String()
 }
