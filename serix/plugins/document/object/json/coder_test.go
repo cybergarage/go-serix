@@ -21,5 +21,5 @@ import (
 )
 
 func TestJSONCoder(t *testing.T) {
-	object.ObjectCoderSuite(t, NewCoder())
+	object.ObjectSerializerSuite(t, NewCoder())
 }

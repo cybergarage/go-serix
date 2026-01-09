@@ -21,5 +21,5 @@ import (
 )
 
 func TestCBORCorder(t *testing.T) {
-	object.ObjectCoderSuite(t, NewCoder())
+	object.ObjectSerializerSuite(t, NewCoder())
 }

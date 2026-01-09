@@ -21,5 +21,5 @@ import (
 )
 
 func TestGzipCoder(t *testing.T) {
-	object.BinaryCoderSuite(t, NewCoder())
+	object.ObjectCompressorSuite(t, NewCoder())
 }

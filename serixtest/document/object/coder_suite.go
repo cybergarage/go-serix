@@ -21,8 +21,8 @@ import (
 	"github.com/cybergarage/go-serix/serix/document"
 )
 
-// ObjectCoderSuite tests the specified document coder.
-func ObjectCoderSuite(t *testing.T, coder document.ObjectCoder) {
+// ObjectSerializerSuite tests the specified document coder.
+func ObjectSerializerSuite(t *testing.T, coder document.ObjectCoder) {
 	t.Helper()
 
 	testFuncs := []struct {
@@ -41,8 +41,8 @@ func ObjectCoderSuite(t *testing.T, coder document.ObjectCoder) {
 	}
 }
 
-// BinaryCoderSuite tests the binary encoding and decoding using the provided Coder.
-func BinaryCoderSuite(t *testing.T, coder document.ObjectCoder) {
+// ObjectCompressorSuite tests the binary encoding and decoding using the provided Coder.
+func ObjectCompressorSuite(t *testing.T, coder document.ObjectCoder) {
 	t.Helper()
 
 	testFuncs := []struct {
