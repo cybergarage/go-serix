@@ -27,6 +27,11 @@ func NewCoder() *Coder {
 	return &Coder{}
 }
 
+// Name returns the name of the coder.
+func (s *Coder) Name() string {
+	return "composite"
+}
+
 // EncodeKey returns the encoded bytes from the specified key if available, otherwise returns an error.
 func (s *Coder) EncodeKey(key document.Key) ([]byte, error) {
 	tpl, err := newTupleWith(key)
