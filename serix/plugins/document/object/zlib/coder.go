@@ -53,10 +53,14 @@ func (s *Coder) EncodeObject(w io.Writer, obj document.Object) error {
 	}
 
 	zw := zlib.NewWriter(w)
-	defer zw.Close()
 
-	_, err := zw.Write(data)
-	return err
+	if _, err := zw.Write(data); err != nil {
+		zw.Close()
+		return err
+	}
+
+	// Must close to flush all compressed data
+	return zw.Close()
 }
 
 // DecodeObject returns the decoded object from the specified reader if available, otherwise returns an error.

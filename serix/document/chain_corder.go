@@ -71,11 +71,11 @@ func (mc *chainCorder) EncodeObject(w io.Writer, obj Object) error {
 
 // DecodeObject returns the decorded object from the specified reader if available, otherwise returns an error.
 func (mc *chainCorder) DecodeObject(r io.Reader) (Object, error) {
-	lastReader := r
+	nextReader := r
 	var lastObject Object
 	for i := len(mc.coders) - 1; i >= 0; i-- {
 		coder := mc.coders[i]
-		obj, err := coder.DecodeObject(lastReader)
+		obj, err := coder.DecodeObject(nextReader)
 		if err != nil {
 			return nil, coderError(coder, err)
 		}
@@ -85,9 +85,9 @@ func (mc *chainCorder) DecodeObject(r io.Reader) (Object, error) {
 		}
 		switch v := obj.(type) {
 		case string:
-			lastReader = strings.NewReader(v)
+			nextReader = strings.NewReader(v)
 		case []byte:
-			lastReader = bytes.NewReader(v)
+			nextReader = bytes.NewReader(v)
 		default:
 			return nil, coderError(coder, fmt.Errorf("unexpected type %T", obj))
 		}

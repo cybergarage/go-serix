@@ -54,11 +54,15 @@ func (s *Coder) EncodeObject(w io.Writer, obj document.Object) error {
 
 	// Create gzip writer
 	gzipWriter := gzip.NewWriter(w)
-	defer gzipWriter.Close()
 
 	// Write compressed data
-	_, err := gzipWriter.Write(data)
-	return err
+	if _, err := gzipWriter.Write(data); err != nil {
+		gzipWriter.Close()
+		return err
+	}
+
+	// Must close to flush all compressed data
+	return gzipWriter.Close()
 }
 
 // DecodeObject returns the decoded object from the specified reader if available, otherwise returns an error.
