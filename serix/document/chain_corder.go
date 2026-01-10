@@ -53,45 +53,44 @@ func coderError(coder ObjectCoder, err error) error {
 // EncodeObject writes the specified object to the specified writer.
 func (mc *chainCorder) EncodeObject(w io.Writer, obj Object) error {
 	nextObject := obj
-	var lastWriter *bytes.Buffer
 	for _, coder := range mc.coders {
-		if lastWriter == nil {
-			lastWriter = bytes.NewBuffer(nil)
-		} else {
-			lastWriter.Reset()
-		}
-		if err := coder.EncodeObject(lastWriter, nextObject); err != nil {
+		var buf bytes.Buffer
+		if err := coder.EncodeObject(&buf, nextObject); err != nil {
 			return coderError(coder, err)
 		}
-		nextObject = lastWriter.Bytes()
+		// Make a copy to avoid issues with buffer reuse
+		nextObject = append([]byte(nil), buf.Bytes()...)
 	}
-	if lastWriter == nil {
-		return nil
+	// nextObject is now []byte, write it to the output writer
+	if data, ok := nextObject.([]byte); ok {
+		_, err := w.Write(data)
+		return err
 	}
-	_, err := w.Write(lastWriter.Bytes())
-	return err
+	return nil
 }
 
 // DecodeObject returns the decorded object from the specified reader if available, otherwise returns an error.
 func (mc *chainCorder) DecodeObject(r io.Reader) (Object, error) {
 	lastReader := r
-	var lastObject any
-	var err error
+	var lastObject Object
 	for i := len(mc.coders) - 1; i >= 0; i-- {
 		coder := mc.coders[i]
-		lastObject, err = coder.DecodeObject(lastReader)
+		obj, err := coder.DecodeObject(lastReader)
 		if err != nil {
 			return nil, coderError(coder, err)
 		}
+		lastObject = obj
 		if i == 0 {
 			break
 		}
-		nextObj, ok := lastObject.([]byte)
-		if !ok {
-			err := fmt.Errorf("expected []byte, got %T", lastObject)
-			return nil, coderError(coder, err)
+		switch v := obj.(type) {
+		case string:
+			lastReader = strings.NewReader(v)
+		case []byte:
+			lastReader = bytes.NewReader(v)
+		default:
+			return nil, coderError(coder, fmt.Errorf("unexpected type %T", obj))
 		}
-		lastReader = bytes.NewReader(nextObj)
 	}
 	return lastObject, nil
 }
