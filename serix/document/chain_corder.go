@@ -16,7 +16,7 @@ package document
 
 import (
 	"bytes"
-	"errors"
+	"fmt"
 	"io"
 	"strings"
 )
@@ -46,6 +46,10 @@ func (mc *chainCorder) Type() CoderType {
 	return ObjectSerializer | ObjectCompressor
 }
 
+func coderError(coder ObjectCoder, err error) error {
+	return fmt.Errorf("%w (%s)", err, coder.Name())
+}
+
 // EncodeObject writes the specified object to the specified writer.
 func (mc *chainCorder) EncodeObject(w io.Writer, obj Object) error {
 	nextObject := obj
@@ -57,7 +61,7 @@ func (mc *chainCorder) EncodeObject(w io.Writer, obj Object) error {
 			lastWriter.Reset()
 		}
 		if err := coder.EncodeObject(lastWriter, nextObject); err != nil {
-			return err
+			return coderError(coder, err)
 		}
 		nextObject = lastWriter.Bytes()
 	}
@@ -70,14 +74,24 @@ func (mc *chainCorder) EncodeObject(w io.Writer, obj Object) error {
 
 // DecodeObject returns the decorded object from the specified reader if available, otherwise returns an error.
 func (mc *chainCorder) DecodeObject(r io.Reader) (Object, error) {
-	var lastErr error
+	lastReader := r
+	var lastObject any
+	var err error
 	for i := len(mc.coders) - 1; i >= 0; i-- {
-		obj, err := mc.coders[i].DecodeObject(r)
+		coder := mc.coders[i]
+		lastObject, err = coder.DecodeObject(lastReader)
 		if err != nil {
-			lastErr = errors.Join(lastErr, err)
-			continue
+			return nil, coderError(coder, err)
 		}
-		return obj, nil
+		if i == 0 {
+			break
+		}
+		nextObj, ok := lastObject.([]byte)
+		if !ok {
+			err := fmt.Errorf("expected []byte, got %T", lastObject)
+			return nil, coderError(coder, err)
+		}
+		lastReader = bytes.NewReader(nextObj)
 	}
-	return nil, lastErr
+	return lastObject, nil
 }
