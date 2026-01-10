@@ -19,8 +19,34 @@ import (
 	"testing"
 
 	"github.com/cybergarage/go-serix/serix/document"
+	"github.com/cybergarage/go-serix/serixtest/document/key"
 	"github.com/cybergarage/go-serix/serixtest/document/object"
 )
+
+// KeyCoderSuite tests the encoding and decoding of keys using the provided KeyCoder.
+func KeyCoderSuite(t *testing.T, coder document.KeyCoder) {
+	t.Helper()
+
+	tests := []struct {
+		name string
+		test func(t *testing.T, coder document.KeyCoder)
+	}{
+		{
+			name: "RoundTripKeyTest",
+			test: key.RoundTripKeyTest,
+		},
+		{
+			name: "SortableKeyTest",
+			test: key.SortableKeyTest,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.test(t, coder)
+		})
+	}
+}
 
 // ObjectSerializerSuite tests the specified document coder.
 func ObjectSerializerSuite(t *testing.T, coder document.ObjectCoder) {
@@ -45,38 +71,18 @@ func ObjectSerializerSuite(t *testing.T, coder document.ObjectCoder) {
 // ObjectCompressorSuite tests the binary encoding and decoding using the provided Coder.
 func ObjectCompressorSuite(t *testing.T, coder document.ObjectCoder) {
 	t.Helper()
-	/*
-		cascadeBinaryCoderTest := func(t *testing.T, compressor document.ObjectCoder) {
-			t.Helper()
 
-			if compressor.Type() != document.ObjectCompressor {
-				t.Fatalf("expected document.ObjectCompressor, got %v", compressor.Type())
-			}
+	// cascadeCompressorSuite := func(t *testing.T, coder document.ObjectCoder) {
+	// 	t.Helper()
+	// 	plugins.CascadeCompressorSuite(t, coder, ObjectSerializerSuite)
+	// }
 
-			serializer := []document.ObjectCoder{}
-
-			mgr := plugins.NewManager()
-			for _, plugin := range mgr.ObjectCoders() {
-				if compressor.Type() == document.ObjectSerializer {
-					serializer = append(serializer, plugin)
-				}
-			}
-
-			for _, serializer := range serializer {
-				t.Run(serializer.Name()+" + "+compressor.Name(), func(t *testing.T) {
-					coder := document.NewChainCorder(serializer, compressor)
-					ObjectCompressorSuite(t, coder)
-				})
-			}
-
-		}
-	*/
 	testFuncs := []struct {
 		name string
 		fn   func(*testing.T, document.ObjectCoder)
 	}{
 		{"single", object.BinaryCoderTest},
-		// {"cascade", cascadeBinaryCoderTest},
+		// {"cascade", cascadeCompressorSuite},
 	}
 
 	for _, testFunc := range testFuncs {
