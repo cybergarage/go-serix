@@ -30,11 +30,11 @@ const (
 func (ct CoderType) String() string {
 	switch ct {
 	case KeySerializer:
-		return "key_serializer"
+		return "key-serializer"
 	case ObjectSerializer:
-		return "object_serializer"
+		return "object-serializer"
 	case ObjectCompressor:
-		return "object_compressor"
+		return "object-compressor"
 	default:
 		return "unknown"
 	}
