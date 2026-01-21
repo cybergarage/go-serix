@@ -41,7 +41,7 @@ func SortableKeyTest(t *testing.T, coder document.KeyCoder) {
 		}
 
 		// Encode all values
-		var encodings [][]byte
+		encodings := make([][]byte, 0, len(values))
 		for _, v := range values {
 			key := document.NewKeyWith(v)
 			encoded, err := coder.EncodeKey(key)
@@ -77,7 +77,7 @@ func SortableKeyTest(t *testing.T, coder document.KeyCoder) {
 		}
 
 		// Encode all values
-		var encodings [][]byte
+		encodings := make([][]byte, 0, len(values))
 		for _, v := range values {
 			key := document.NewKeyWith(v)
 			encoded, err := coder.EncodeKey(key)
@@ -116,7 +116,7 @@ func SortableKeyTest(t *testing.T, coder document.KeyCoder) {
 		}
 
 		// Encode all values
-		var encodings [][]byte
+		encodings := make([][]byte, 0, len(values))
 		for _, v := range values {
 			key := document.NewKeyWith(v)
 			encoded, err := coder.EncodeKey(key)
@@ -163,7 +163,7 @@ func SortableKeyTest(t *testing.T, coder document.KeyCoder) {
 		for _, tc := range testCases {
 			t.Run(tc.name, func(t *testing.T) {
 				// Encode all tuples
-				var encodings [][]byte
+				encodings := make([][]byte, 0, len(tc.keys))
 				for _, key := range tc.keys {
 					encoded, err := coder.EncodeKey(key)
 					if err != nil {
