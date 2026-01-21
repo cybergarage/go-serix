@@ -16,9 +16,10 @@ package object
 
 import (
 	"bytes"
+	"crypto/rand"
 	_ "embed"
 	"fmt"
-	"math/rand"
+	"math/big"
 	"reflect"
 	"testing"
 
@@ -151,7 +152,12 @@ func ArrayObjectTest(t *testing.T, coder document.ObjectCoder) {
 	shuffleArray := func(array []any) {
 		n := len(array)
 		for i := n - 1; i > 0; i-- {
-			j := rand.Intn(i + 1)
+			max := big.NewInt(int64(i + 1))
+			jBig, err := rand.Int(rand.Reader, max)
+			if err != nil {
+				panic(err)
+			}
+			j := int(jBig.Int64())
 			array[i], array[j] = array[j], array[i]
 		}
 	}
@@ -225,7 +231,13 @@ func ArrayObjectTest(t *testing.T, coder document.ObjectCoder) {
 
 		w.Reset()
 
-		nObj := rand.Intn(len(obj)-1) + 1
+		max := big.NewInt(int64(len(obj) - 1))
+		nBig, err := rand.Int(rand.Reader, max)
+		if err != nil {
+			t.Error(err)
+			return
+		}
+		nObj := int(nBig.Int64()) + 1
 		obj = obj[:nObj]
 
 		err = coder.EncodeObject(&w, obj)
