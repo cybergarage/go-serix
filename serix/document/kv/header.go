@@ -14,8 +14,11 @@
 
 package kv
 
-import "fmt"
+import (
+	"fmt"
+)
 
+// HeaderType represents a header type.
 type HeaderType byte
 
 // DocumentType represents a document type.
@@ -27,8 +30,8 @@ type KeyHeader [2]byte
 // Version represents a version.
 type Version byte
 
-// IndexType represents an index type.
-type IndexType byte
+// DocumentSubType represents a document sub type.
+type DocumentSubType byte
 
 // NewKeyHeaderFrom creates a new key header from the specified bytes.
 func NewKeyHeaderFrom(b []byte) KeyHeader {
@@ -52,9 +55,9 @@ func (header KeyHeader) DocumentType() DocumentType {
 	return DocumentType(TypeFromHeaderByte(header[1]))
 }
 
-// IndexType returns an index type.
-func (header KeyHeader) IndexType() IndexType {
-	return IndexType(TypeFromHeaderByte(header[1]))
+// DocumentSubType returns a document sub type.
+func (header KeyHeader) DocumentSubType() DocumentSubType {
+	return DocumentSubType(TypeFromHeaderByte(header[1]))
 }
 
 // Bytes returns a byte array.
