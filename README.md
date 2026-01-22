@@ -20,11 +20,6 @@ The name "Serix" is derived from "Serialize" and "X" (standing for extensibility
 
 ## Getting Started with go-serix
 
-`go-serix` is a Go library that provides an idiomatic, schema-driven API for encoding and decoding structured data. It is designed to be lightweight and integration-friendly, with pluggable serialization formats and composable compression.
-
-- Repository: https://github.com/cybergarage/go-serix
-- Go reference: https://pkg.go.dev/github.com/cybergarage/go-serix
-
 ### Installation
 
 Add the module to your project:
