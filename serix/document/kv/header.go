@@ -21,8 +21,8 @@ import (
 // HeaderType represents a header type.
 type HeaderType byte
 
-// DocumentType represents a document type.
-type DocumentType byte
+// ObjectType represents an object type.
+type ObjectType byte
 
 // KeyHeader represents a header for all keys.
 type KeyHeader [2]byte
@@ -50,9 +50,9 @@ func (header KeyHeader) Version() Version {
 	return VertionFromHeaderByte(header[1])
 }
 
-// DocumentType returns a document type.
-func (header KeyHeader) DocumentType() DocumentType {
-	return DocumentType(TypeFromHeaderByte(header[1]))
+// ObjectType returns an object type.
+func (header KeyHeader) ObjectType() ObjectType {
+	return ObjectType(TypeFromHeaderByte(header[1]))
 }
 
 // DocumentSubType returns a document sub type.

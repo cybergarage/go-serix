@@ -19,25 +19,8 @@ const (
 )
 
 const (
-	CBOR = DocumentType(1)
+	CBOR = ObjectType(1)
 )
-
-const (
-	DatabaseObject   = HeaderType('D')
-	CollectionObject = HeaderType('C')
-	DocumentObject   = HeaderType('O')
-	IndexObject      = HeaderType('I')
-)
-
-const (
-	PrimaryIndex   = DocumentSubType(1)
-	SecondaryIndex = DocumentSubType(2)
-)
-
-var DatabaseKeyHeader = [2]byte{byte(DatabaseObject), byte(byte(CBOR) | HeaderByteFromVersion(V1))}
-var CollectionKeyHeader = [2]byte{byte(CollectionObject), byte(byte(CBOR) | HeaderByteFromVersion(V1))}
-var DocumentKeyHeader = [2]byte{byte(DocumentObject), byte(byte(CBOR) | HeaderByteFromVersion(V1))}
-var IndexKeyHeader = [2]byte{byte(IndexObject), byte(byte(SecondaryIndex) | HeaderByteFromVersion(V1))}
 
 func HeaderByteFromVersion(v Version) byte {
 	return (byte(v<<4) & 0x70)

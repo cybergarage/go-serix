@@ -22,7 +22,7 @@ func TestKeyHeader(t *testing.T) {
 	type expected struct {
 		tp  HeaderType
 		ver Version
-		doc DocumentType
+		doc ObjectType
 		idx DocumentSubType
 	}
 	testKeyHeaders := []struct {
@@ -32,7 +32,7 @@ func TestKeyHeader(t *testing.T) {
 		{
 			header: DatabaseKeyHeader,
 			expected: expected{
-				tp:  DatabaseObject,
+				tp:  ObjectType(1),
 				ver: V1,
 				doc: CBOR,
 				idx: DocumentSubType(0),
@@ -41,7 +41,7 @@ func TestKeyHeader(t *testing.T) {
 		{
 			header: CollectionKeyHeader,
 			expected: expected{
-				tp:  CollectionObject,
+				tp:  ObjectType(2),
 				ver: V1,
 				doc: CBOR,
 				idx: DocumentSubType(0),
@@ -50,7 +50,7 @@ func TestKeyHeader(t *testing.T) {
 		{
 			header: DocumentKeyHeader,
 			expected: expected{
-				tp:  DocumentObject,
+				tp:  ObjectType(3),
 				ver: V1,
 				doc: CBOR,
 				idx: DocumentSubType(0),
@@ -59,10 +59,10 @@ func TestKeyHeader(t *testing.T) {
 		{
 			header: IndexKeyHeader,
 			expected: expected{
-				tp:  IndexObject,
+				tp:  ObjectType(4),
 				ver: V1,
-				doc: DocumentType(0),
-				idx: SecondaryIndex,
+				doc: ObjectType(0),
+				idx: DocumentSubType(2),
 			},
 		},
 	}
@@ -73,9 +73,9 @@ func TestKeyHeader(t *testing.T) {
 		if key.header.Version() != key.expected.ver {
 			t.Errorf("%v != %v", key.header.Version(), key.expected.ver)
 		}
-		if key.expected.doc != DocumentType(0) {
-			if key.header.DocumentType() != key.expected.doc {
-				t.Errorf("%v != %v", key.header.DocumentType(), key.expected.doc)
+		if key.expected.doc != ObjectType(0) {
+			if key.header.ObjectType() != key.expected.doc {
+				t.Errorf("%v != %v", key.header.ObjectType(), key.expected.doc)
 			}
 		}
 		if key.expected.idx != DocumentSubType(0) {
