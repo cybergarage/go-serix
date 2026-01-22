@@ -25,56 +25,6 @@ var (
 	ErrNotExist     = errors.New("not exist")
 )
 
-func newErrElementMapNotExist() error {
-	return fmt.Errorf("element map is %w", ErrNotExist)
-}
-
-func newErrElementNotExistError(name string) error {
-	return fmt.Errorf("element (%s) is %w", name, ErrNotExist)
-}
-
-func newErrIndexNotExist(name string) error {
-	return fmt.Errorf("index (%s) is %w", name, ErrNotExist)
-}
-
-func newErrIndexMapNotExist() error {
-	return fmt.Errorf("index map is %w", ErrNotExist)
-}
-
-func newErrElementInvalid(obj any) error {
-	return fmt.Errorf("element (%T:%v) is %w", obj, obj, ErrInvalid)
-}
-
-func newErrSchemaInvalid(obj any) error {
-	return fmt.Errorf("schema (%T:%v) is %w", obj, obj, ErrInvalid)
-}
-
 func newErrObjectInvalid(obj any) error {
 	return fmt.Errorf("object (%T:%v) is %w", obj, obj, ErrInvalid)
-}
-
-func newErrIndexInvalid(obj any) error {
-	return fmt.Errorf("index (%T:%v) is %w", obj, obj, ErrInvalid)
-}
-
-func newErrElementTypeInvalid(v any) error {
-	return fmt.Errorf("element type (%s:%v) is %w", v, v, ErrInvalid)
-}
-
-func newErrDatabaseKeyNotExist(key Key) error {
-	return fmt.Errorf("database ken (%s) is %w", key.String(), ErrNotExist)
-}
-
-func newErrCollectionKeyNotExist(key Key) error {
-	return fmt.Errorf("collection ken (%s) is %w", key.String(), ErrNotExist)
-}
-
-// NewErrPrimaryIndexNotExist returns a new error that the primary index is not exist.
-func NewErrPrimaryIndexNotExist() error {
-	return fmt.Errorf("primary index is %w", ErrNotExist)
-}
-
-// NewErrObjectNotExist returns a new error that the object is not exist.
-func NewErrObjectNotExist(key Key) error {
-	return fmt.Errorf("object (%s) is %w ", key, ErrNotExist)
 }
