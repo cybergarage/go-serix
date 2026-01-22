@@ -17,3 +17,7 @@
 - Integration-friendly design for production Go services
 
 The name "Serix" is derived from "Serialize" and "X" (standing for extensibility), reflecting the project's goal of providing a flexible and extensible serialization framework.
+
+## Table of Contents
+
+- [Getting Started](doc/getting-started.md)
