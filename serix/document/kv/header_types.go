@@ -18,10 +18,6 @@ const (
 	V1 = Version(1)
 )
 
-const (
-	CBOR = ObjectType(1)
-)
-
 func HeaderByteFromVersion(v Version) byte {
 	return (byte(v<<4) & 0x70)
 }

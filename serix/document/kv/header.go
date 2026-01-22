@@ -21,22 +21,30 @@ import (
 // HeaderType represents a header type.
 type HeaderType byte
 
-// ObjectType represents an object type.
-type ObjectType byte
-
 // KeyHeader represents a header for all keys.
 type KeyHeader [2]byte
 
 // Version represents a version.
 type Version byte
 
-// DocumentSubType represents a document sub type.
-type DocumentSubType byte
+// ObjectType represents an object type.
+type ObjectType byte
+
+// ObjectSubType represents an object sub type.
+type ObjectSubType byte
 
 // NewKeyHeaderFrom creates a new key header from the specified bytes.
 func NewKeyHeaderFrom(b []byte) KeyHeader {
 	var header KeyHeader
 	copy(header[:], b)
+	return header
+}
+
+// NewKeyHeaderWith creates a new key header with the specified parameters.
+func NewKeyHeaderWith(tp HeaderType, ver Version, objType ObjectType) KeyHeader {
+	var header KeyHeader
+	header[0] = byte(tp)
+	header[1] = HeaderByteFromVersion(ver) | byte(objType)
 	return header
 }
 
@@ -55,9 +63,9 @@ func (header KeyHeader) ObjectType() ObjectType {
 	return ObjectType(TypeFromHeaderByte(header[1]))
 }
 
-// DocumentSubType returns a document sub type.
-func (header KeyHeader) DocumentSubType() DocumentSubType {
-	return DocumentSubType(TypeFromHeaderByte(header[1]))
+// ObjectSubType returns an object sub type.
+func (header KeyHeader) ObjectSubType() ObjectSubType {
+	return ObjectSubType(TypeFromHeaderByte(header[1]))
 }
 
 // Bytes returns a byte array.
