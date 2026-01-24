@@ -44,7 +44,7 @@ func NewKeyHeaderFrom(b []byte) KeyHeader {
 func NewKeyHeaderWith(tp HeaderType, ver Version, objType Category) KeyHeader {
 	var header KeyHeader
 	header[0] = byte(tp)
-	header[1] = headereaderByteFromVersion(ver) | byte(objType)
+	header[1] = headerByteFromVersion(ver) | byte(objType)
 	return header
 }
 

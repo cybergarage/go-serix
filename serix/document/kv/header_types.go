@@ -18,7 +18,7 @@ const (
 	V1 = Version(1)
 )
 
-func headereaderByteFromVersion(v Version) byte {
+func headerByteFromVersion(v Version) byte {
 	return (byte(v<<4) & 0x70)
 }
 
