@@ -14,19 +14,15 @@
 
 package kv
 
-const (
-	V1 = Version(1)
-)
+// Format represents an object format.
+type Format byte
 
-// Version represents a version.
-type Version byte
-
-// NewVersionFromHeaderByte creates a new version from a header byte.
-func NewVersionFromHeaderByte(b byte) Version {
-	return Version((b >> 4) & 0x07)
+// NewFormatFromHeaderByte creates a new format from a header byte.
+func NewFormatFromHeaderByte(b byte) byte {
+	return (b & 0x07)
 }
 
-// HeaderByte returns the header byte for the version.
-func (v Version) HeaderByte() byte {
-	return byte(v<<4) & 0x70
+// HeaderByte returns the header byte for the format.
+func (f Format) HeaderByte() byte {
+	return byte(f) & 0x07
 }

@@ -14,10 +14,5 @@
 
 package kv
 
-func headerByteFromVersion(v Version) byte {
-	return (byte(v<<4) & 0x70)
-}
-
-func typeFromHeaderByte(b byte) byte {
-	return (b & 0x07)
-}
+// Category represents an object category.
+type Category byte

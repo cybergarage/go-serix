@@ -21,12 +21,6 @@ import (
 // KeyHeader represents a header for all keys.
 type KeyHeader [2]byte
 
-// Category represents an object category.
-type Category byte
-
-// Format represents an object format.
-type Format byte
-
 // NewKeyHeaderFrom creates a new key header from the specified bytes.
 func NewKeyHeaderFrom(b []byte) KeyHeader {
 	var header KeyHeader
@@ -38,7 +32,7 @@ func NewKeyHeaderFrom(b []byte) KeyHeader {
 func NewKeyHeaderWith(c Category, ver Version, fmt Format) KeyHeader {
 	var header KeyHeader
 	header[0] = byte(c)
-	header[1] = headerByteFromVersion(ver) | byte(fmt)
+	header[1] = ver.HeaderByte() | byte(fmt)
 	return header
 }
 
@@ -54,7 +48,7 @@ func (header KeyHeader) Version() Version {
 
 // Format returns a format.
 func (header KeyHeader) Format() Format {
-	return Format(typeFromHeaderByte(header[1]))
+	return Format(NewFormatFromHeaderByte(header[1]))
 }
 
 // Bytes returns a byte array.
