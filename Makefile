@@ -53,6 +53,15 @@ vet: format
 lint: vet
 	golangci-lint run ${PKG_SRC_DIR}/... ${TEST_PKG_DIR}/...
 
+%.md : %.adoc
+	asciidoctor -b docbook -a leveloffset=+1 -o - $< | pandoc -t markdown_strict --wrap=none -f docbook > $@
+	-git commit $@ $< -m "Update doc: $<"
+csvs := $(wildcard doc/*/*.csv)
+docs := $(patsubst %.adoc,%.md,$(wildcard doc/*.adoc))
+doc-touch: $(csvs)
+	touch doc/*.adoc
+doc: doc-touch $(docs)
+
 godoc:
 	go install golang.org/x/tools/cmd/godoc@latest
 	open http://localhost:6060/pkg/${PKG_ID}/ || xdg-open http://localhost:6060/pkg/${PKG_ID}/ || gnome-open http://localhost:6060/pkg/${PKG_ID}/
