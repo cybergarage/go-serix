@@ -44,7 +44,7 @@ func NewKeyHeaderFrom(b []byte) KeyHeader {
 func NewKeyHeaderWith(tp HeaderType, ver Version, objType Category) KeyHeader {
 	var header KeyHeader
 	header[0] = byte(tp)
-	header[1] = HeaderByteFromVersion(ver) | byte(objType)
+	header[1] = headereaderByteFromVersion(ver) | byte(objType)
 	return header
 }
 
@@ -55,17 +55,17 @@ func (header KeyHeader) Type() HeaderType {
 
 // Version returns a version.
 func (header KeyHeader) Version() Version {
-	return VertionFromHeaderByte(header[1])
+	return vertionFromHeaderByte(header[1])
 }
 
 // Category returns a category.
 func (header KeyHeader) Category() Category {
-	return Category(TypeFromHeaderByte(header[1]))
+	return Category(typeFromHeaderByte(header[1]))
 }
 
 // Format returns a format.
 func (header KeyHeader) Format() Format {
-	return Format(TypeFromHeaderByte(header[1]))
+	return Format(typeFromHeaderByte(header[1]))
 }
 
 // Bytes returns a byte array.

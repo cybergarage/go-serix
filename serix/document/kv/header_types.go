@@ -18,14 +18,14 @@ const (
 	V1 = Version(1)
 )
 
-func HeaderByteFromVersion(v Version) byte {
+func headereaderByteFromVersion(v Version) byte {
 	return (byte(v<<4) & 0x70)
 }
 
-func VertionFromHeaderByte(b byte) Version {
+func vertionFromHeaderByte(b byte) Version {
 	return Version((b >> 4) & 0x07)
 }
 
-func TypeFromHeaderByte(b byte) byte {
+func typeFromHeaderByte(b byte) byte {
 	return (b & 0x07)
 }
