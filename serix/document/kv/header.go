@@ -27,11 +27,11 @@ type KeyHeader [2]byte
 // Version represents a version.
 type Version byte
 
-// ObjectType represents an object type.
-type ObjectType byte
+// Category represents an object category.
+type Category byte
 
-// ObjectSubType represents an object sub type.
-type ObjectSubType byte
+// Format represents an object format.
+type Format byte
 
 // NewKeyHeaderFrom creates a new key header from the specified bytes.
 func NewKeyHeaderFrom(b []byte) KeyHeader {
@@ -41,7 +41,7 @@ func NewKeyHeaderFrom(b []byte) KeyHeader {
 }
 
 // NewKeyHeaderWith creates a new key header with the specified parameters.
-func NewKeyHeaderWith(tp HeaderType, ver Version, objType ObjectType) KeyHeader {
+func NewKeyHeaderWith(tp HeaderType, ver Version, objType Category) KeyHeader {
 	var header KeyHeader
 	header[0] = byte(tp)
 	header[1] = HeaderByteFromVersion(ver) | byte(objType)
@@ -58,14 +58,14 @@ func (header KeyHeader) Version() Version {
 	return VertionFromHeaderByte(header[1])
 }
 
-// ObjectType returns an object type.
-func (header KeyHeader) ObjectType() ObjectType {
-	return ObjectType(TypeFromHeaderByte(header[1]))
+// Category returns a category.
+func (header KeyHeader) Category() Category {
+	return Category(TypeFromHeaderByte(header[1]))
 }
 
-// ObjectSubType returns an object sub type.
-func (header KeyHeader) ObjectSubType() ObjectSubType {
-	return ObjectSubType(TypeFromHeaderByte(header[1]))
+// Format returns a format.
+func (header KeyHeader) Format() Format {
+	return Format(TypeFromHeaderByte(header[1]))
 }
 
 // Bytes returns a byte array.
