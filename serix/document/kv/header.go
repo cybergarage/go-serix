@@ -18,14 +18,8 @@ import (
 	"fmt"
 )
 
-// HeaderType represents a header type.
-type HeaderType byte
-
 // KeyHeader represents a header for all keys.
 type KeyHeader [2]byte
-
-// Version represents a version.
-type Version byte
 
 // Category represents an object category.
 type Category byte
@@ -41,26 +35,21 @@ func NewKeyHeaderFrom(b []byte) KeyHeader {
 }
 
 // NewKeyHeaderWith creates a new key header with the specified parameters.
-func NewKeyHeaderWith(tp HeaderType, ver Version, objType Category) KeyHeader {
+func NewKeyHeaderWith(c Category, ver Version, fmt Format) KeyHeader {
 	var header KeyHeader
-	header[0] = byte(tp)
-	header[1] = headerByteFromVersion(ver) | byte(objType)
+	header[0] = byte(c)
+	header[1] = headerByteFromVersion(ver) | byte(fmt)
 	return header
-}
-
-// Type returns a header type.
-func (header KeyHeader) Type() HeaderType {
-	return HeaderType(header[0])
-}
-
-// Version returns a version.
-func (header KeyHeader) Version() Version {
-	return vertionFromHeaderByte(header[1])
 }
 
 // Category returns a category.
 func (header KeyHeader) Category() Category {
-	return Category(typeFromHeaderByte(header[1]))
+	return Category(header[0])
+}
+
+// Version returns a version.
+func (header KeyHeader) Version() Version {
+	return NewVersionFromHeaderByte(header[1])
 }
 
 // Format returns a format.
@@ -75,5 +64,5 @@ func (header KeyHeader) Bytes() []byte {
 
 // String returns a string.
 func (header KeyHeader) String() string {
-	return fmt.Sprintf("%c %02x", header.Type(), header[1])
+	return fmt.Sprintf("%c %02x", header.Category(), header[1])
 }

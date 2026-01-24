@@ -14,10 +14,14 @@
 
 package kv
 
-func headerByteFromVersion(v Version) byte {
-	return (byte(v<<4) & 0x70)
-}
+const (
+	V1 = Version(1)
+)
 
-func typeFromHeaderByte(b byte) byte {
-	return (b & 0x07)
+// Version represents a version.
+type Version byte
+
+// NewVersionFromHeaderByte creates a new version from a header byte.
+func NewVersionFromHeaderByte(b byte) Version {
+	return Version((b >> 4) & 0x07)
 }

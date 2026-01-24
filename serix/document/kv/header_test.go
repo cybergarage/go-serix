@@ -20,57 +20,57 @@ import (
 
 func TestKeyHeader(t *testing.T) {
 	type expected struct {
-		tp  HeaderType
+		cat Category
 		ver Version
-		doc Category
+		fmt Format
 	}
 	testKeyHeaders := []struct {
 		header   KeyHeader
 		expected expected
 	}{
 		{
-			header: NewKeyHeaderWith(HeaderType(1), V1, Category(1)),
+			header: NewKeyHeaderWith(Category(1), V1, Format(1)),
 			expected: expected{
-				tp:  HeaderType(1),
+				cat: Category(1),
 				ver: V1,
-				doc: Category(1),
+				fmt: Format(1),
 			},
 		},
 		{
-			header: NewKeyHeaderWith(HeaderType(2), V1, Category(2)),
+			header: NewKeyHeaderWith(Category(2), V1, Format(2)),
 			expected: expected{
-				tp:  HeaderType(2),
+				cat: Category(2),
 				ver: V1,
-				doc: Category(2),
+				fmt: Format(2),
 			},
 		},
 		{
-			header: NewKeyHeaderWith(HeaderType(3), V1, Category(3)),
+			header: NewKeyHeaderWith(Category(3), V1, Format(3)),
 			expected: expected{
-				tp:  HeaderType(3),
+				cat: Category(3),
 				ver: V1,
-				doc: Category(3),
+				fmt: Format(3),
 			},
 		},
 		{
-			header: NewKeyHeaderWith(HeaderType(4), V1, Category(4)),
+			header: NewKeyHeaderWith(Category(4), V1, Format(4)),
 			expected: expected{
-				tp:  HeaderType(4),
+				cat: Category(4),
 				ver: V1,
-				doc: Category(4),
+				fmt: Format(4),
 			},
 		},
 	}
 	for _, key := range testKeyHeaders {
-		if key.header.Type() != key.expected.tp {
-			t.Errorf("%v != %v", key.header.Type(), key.expected.tp)
+		if key.header.Category() != key.expected.cat {
+			t.Errorf("%v != %v", key.header.Category(), key.expected.cat)
 		}
 		if key.header.Version() != key.expected.ver {
 			t.Errorf("%v != %v", key.header.Version(), key.expected.ver)
 		}
-		if key.expected.doc != Category(0) {
-			if key.header.Category() != key.expected.doc {
-				t.Errorf("%v != %v", key.header.Category(), key.expected.doc)
+		if key.expected.fmt != Format(0) {
+			if key.header.Format() != key.expected.fmt {
+				t.Errorf("%v != %v", key.header.Format(), key.expected.fmt)
 			}
 		}
 	}
